@@ -8,8 +8,9 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProductVersion>10.0.20506</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <RootNamespace></RootNamespace>
-    <ProjectGuid>{D7547AC2-EC9C-DC2D-3FAA-925B33C44FBA}</ProjectGuid>
+    <RootNamespace>
+    </RootNamespace>
+    <ProjectGuid>{158122B7-AEA1-5DA9-0E51-13CBF4A462FF}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <AssemblyName>Assembly-CSharp</AssemblyName>
@@ -68,13 +69,13 @@
     <Compile Include="Assets\Scripts\AI\Training\PointsHandler.cs" />
     <Compile Include="Assets\Scripts\AI\Training\WeightsBalancer.cs" />
     <Compile Include="Assets\Scripts\AI\NeuralNetwork.cs" />
-    <Compile Include="Assets\Scripts\AI\Training\Parameters.cs" />
+    <Compile Include="Assets\Scripts\AI\Training\NeuralNetworkParameters.cs" />
     <Compile Include="Assets\Scripts\Camera\CameraMovement.cs" />
     <Compile Include="Assets\Scripts\Starter.cs" />
+    <Compile Include="Assets\Scripts\Borders.cs" />
     <Compile Include="Assets\Scripts\Enemy\Enemy.cs" />
     <Compile Include="Assets\Scripts\IDieable.cs" />
     <Compile Include="Assets\Scripts\Save\SaveBinder.cs" />
-    <Compile Include="Assets\Scripts\Borders.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="UnityEngine">

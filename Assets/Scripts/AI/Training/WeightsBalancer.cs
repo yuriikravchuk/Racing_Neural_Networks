@@ -7,11 +7,11 @@ namespace AI
     {
         private const float _minWeight = 0f, _maxWeight = 1f, _mutationRate = 0.01f;
 
-        public void UniformCross(NeuralNetwork[] parents, NeuralNetwork[] children)
+        public void UniformCross(NeuralNetwork father, NeuralNetwork mother, NeuralNetwork[] children)
         {
-            float[][,] fatherWeights = parents[0].CopyWeights();
-            float[][,] motherWeights = parents[1].CopyWeights();
-            Parameters parameters = parents[0].Parameters;
+            float[][,] fatherWeights = father.CopyWeights();
+            float[][,] motherWeights = mother.CopyWeights();
+            NeuralNetworkParameters parameters = father.Parameters;
             for (int childIndex = 0; childIndex < children.Length; childIndex++)
             {
                 var childWeights = new float[parameters.LayersCount - 1][,];
@@ -36,7 +36,7 @@ namespace AI
 
         public void SetRandomWeights(NeuralNetwork[] networks)
         {
-            Parameters parameters = networks[0].Parameters;
+            NeuralNetworkParameters parameters = networks[0].Parameters;
             for (int i = 0; i < networks.Length; i++)
             {
                 var weights = new float[parameters.LayersCount - 1][,];
@@ -56,7 +56,7 @@ namespace AI
             }
         }
 
-        private void GetNeuronsCountFromLayerIndex(Parameters parameters, int layerIndex, out int neuronsInChild, out int neuronsCount)
+        private void GetNeuronsCountFromLayerIndex(NeuralNetworkParameters parameters, int layerIndex, out int neuronsInChild, out int neuronsCount)
         {
             if (layerIndex == 0)
             {

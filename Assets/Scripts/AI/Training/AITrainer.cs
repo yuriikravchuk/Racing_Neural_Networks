@@ -1,18 +1,25 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using AI;
 
 public class AITrainer : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
+    private IReadOnlyList<NeuralNetwork> _networks;
+
+    private List<NeuralNetwork> _bestNetworks;
+    public void Init(List<NeuralNetwork> bestAI)
     {
-        
+        _bestNetworks = bestAI == null ? new List<NeuralNetwork>() : bestAI;
     }
 
-    // Update is called once per frame
-    void Update()
+    private void GetBestAI()
     {
-        
+        int[] bestScores = new int[3];
+
+        foreach (var network in _networks)
+        {
+
+        }
     }
 }

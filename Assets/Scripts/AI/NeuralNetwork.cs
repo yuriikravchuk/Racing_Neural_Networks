@@ -4,10 +4,10 @@ namespace AI
 {
     public class NeuralNetwork
     {
-        public readonly Parameters Parameters;
+        public readonly NeuralNetworkParameters Parameters;
         private readonly Layer[] _layers;
 
-        public NeuralNetwork(Parameters parameters)
+        public NeuralNetwork(NeuralNetworkParameters parameters)
         {
             Parameters = parameters;
             _layers = new Layer[Parameters.LayersCount];
