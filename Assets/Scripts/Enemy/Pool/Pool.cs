@@ -3,63 +3,44 @@ using UnityEngine;
 
 namespace pool
 {
-	public class Pool
+    public class Pool<T>: IObjectProvider<T> where T : Behaviour
 	{
-		public PoolSetup Setup { get; private set; }
+		private readonly T _prefab;
+		private readonly List<T> _objects;
+		private readonly Transform _parent;
 
+		public Pool(T prefab, Transform parent = null){
+			_prefab = prefab;
+			_objects = new List<T>();
+			_parent = parent ?? new GameObject(typeof(Pool<T>).Name).transform;
+		}
 
-		public List<PoolObject> spawnedObj = new List<PoolObject>();
+		public T Get()
+		{
+			T result = _objects.Find(item => item.isActiveAndEnabled) ?? Create();
+			result.gameObject.SetActive(true);
+			return result;
+		}
 
 		public void ReturnAll()
 		{
-			for (int i = 0; i < spawnedObj.Count; i++)
-			{
-				if (spawnedObj[i] != null && !spawnedObj[i].Free)
-					spawnedObj[i].Return();
-			}
+			foreach(var element in _objects)
+				element.gameObject.SetActive(false);
 		}
 
-		public Pool(PoolSetup setup)
+		public void Clear()
+        {
+			foreach (var element in _objects)
+				Object.Destroy(element);
+
+			_objects.Clear();
+		}
+
+		private T Create()
 		{
-			Setup = setup;
+			T elment = Object.Instantiate(_prefab, _parent);
+			_objects.Add(elment);
+			return elment;
 		}
-
-
-		PoolObject Create(int index = -1)
-		{
-			PoolObject poolObject = Object.Instantiate(Setup.Prefab).GetComponent<PoolObject>();
-			if (poolObject != null)
-			{
-				poolObject.Init(this);
-				if (index == -1)
-					spawnedObj.Add(poolObject);
-				else
-					spawnedObj[index] = poolObject;
-			}
-			else
-				Object.Destroy(poolObject.gameObject);
-			return poolObject;
-		}
-
-		public PoolObject Get()
-		{
-			for (int i = 0; i < spawnedObj.Count; i++)
-			{
-				if (spawnedObj[i] == null)
-				{
-					Create(i);
-					spawnedObj[i].Push();
-					return spawnedObj[i];
-				}
-				if (spawnedObj[i].Free)
-				{
-					spawnedObj[i].Push();
-					return spawnedObj[i];
-				}
-			}
-			PoolObject poolObject = Create(-1);
-			poolObject.Push();
-			return poolObject;
-		}
-	}
+    }
 }

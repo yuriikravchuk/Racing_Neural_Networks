@@ -57,6 +57,7 @@
   <ItemGroup>
     <Compile Include="Assets\Scripts\Enemy\EnemiesFabric.cs" />
     <Compile Include="Assets\Scripts\Car.cs" />
+    <Compile Include="Assets\Scripts\Enemy\Pool\PoolObject.cs" />
     <Compile Include="Assets\Scripts\Player.cs" />
     <Compile Include="Assets\Scripts\AI\Training\AITrainer.cs" />
     <Compile Include="Assets\Scripts\Enemy\EnemiesPool.cs" />
@@ -70,17 +71,13 @@
     <Compile Include="Assets\Scripts\AI\NeuralNetwork.cs" />
     <Compile Include="Assets\Scripts\AI\Training\NeuralNetworkParameters.cs" />
     <Compile Include="Assets\Scripts\Camera\CameraMovement.cs" />
-    <Compile Include="Assets\Scripts\Starter.cs" />
+    <Compile Include="Assets\Scripts\Starters\TrainingSceneStarter.cs" />
     <Compile Include="Assets\Scripts\Borders.cs" />
     <Compile Include="Assets\Scripts\Enemy\Enemy.cs" />
     <Compile Include="Assets\Scripts\IDieable.cs" />
     <Compile Include="Assets\Scripts\Save\SaveBinder.cs" />
-    <Compile Include="Assets\Scripts\Enemy\Pool\PoolObject.cs" />
-    <Compile Include="Assets\Scripts\Enemy\Pool\PoolConfig.cs" />
-    <Compile Include="Assets\Scripts\Enemy\Pool\PoolSetup.cs" />
     <Compile Include="Assets\Scripts\Enemy\Pool\Pool.cs" />
-    <Compile Include="Assets\Scripts\Enemy\Pool\Config.cs" />
-    <Compile Include="Assets\Scripts\Enemy\Pool\PoolsContainer.cs" />
+    <Compile Include="Assets\Scripts\Enemy\Pool\IObjectProvider.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="UnityEngine">
