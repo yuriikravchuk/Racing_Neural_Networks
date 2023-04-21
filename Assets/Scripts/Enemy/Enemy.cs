@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Enemy : Car
+public class Enemy : MonoBehaviour
 {
     private EnemyAI _ai;
 

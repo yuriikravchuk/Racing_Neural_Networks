@@ -1,12 +1,12 @@
 ﻿using UnityEngine;
 using AI;
-public class EnemyAI
+public class EnemyAI : NeuralNetwork
 {
-    private NeuralNetwork _network;
+    public int Points;
 
-    public EnemyAI(NeuralNetwork network)
+    public EnemyAI() : base(new NeuralNetworkParameters())
     {
-        _network = network;
+
     }
 
     public Vector2 GetMoveVector(Vector3 position, Vector3 targetPosition, float speed)

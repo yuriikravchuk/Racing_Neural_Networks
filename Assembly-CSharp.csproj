@@ -56,11 +56,12 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Assets\Scripts\Enemy\EnemiesFabric.cs" />
-    <Compile Include="Assets\Scripts\Car.cs" />
+    <Compile Include="Assets\Scripts\Car\Car.cs" />
     <Compile Include="Assets\Scripts\Enemy\Pool\PoolObject.cs" />
     <Compile Include="Assets\Scripts\Player.cs" />
     <Compile Include="Assets\Scripts\AI\Training\AITrainer.cs" />
     <Compile Include="Assets\Scripts\Enemy\EnemiesPool.cs" />
+    <Compile Include="Assets\Scripts\Enemy\Pool\IObjectProvider.cs" />
     <Compile Include="Assets\Scripts\Save\FileSaveProvider.cs" />
     <Compile Include="Assets\Scripts\Enemy\EnemyAI.cs" />
     <Compile Include="Assets\Scripts\Save\BestAISave.cs" />
@@ -77,7 +78,7 @@
     <Compile Include="Assets\Scripts\IDieable.cs" />
     <Compile Include="Assets\Scripts\Save\SaveBinder.cs" />
     <Compile Include="Assets\Scripts\Enemy\Pool\Pool.cs" />
-    <Compile Include="Assets\Scripts\Enemy\Pool\IObjectProvider.cs" />
+    <Compile Include="Assets\Scripts\Car\CarView.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="UnityEngine">
