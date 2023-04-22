@@ -1,23 +1,13 @@
 ﻿using UnityEngine;
 
-public class Player : Car, IDieable
+public abstract class Player: Car
 {
-    void FixedUpdate()
-    {
-        float vertical = Input.GetAxis("Vertical");
-        float horizontal = Input.GetAxis("Horizontal");
-        if (Input.GetKey(KeyCode.Space))
-            ApplyBreaking(1);
-        else
-            ApplyBreaking(0);
-        Move(vertical);
-        Rotate(horizontal);
-    }
+    [SerializeField] private Car _car;
 
-    public void Die()
+    protected override void GetMovementInputs(out float vertical, out float horizontal, out float breaking)
     {
-        Died?.Invoke();
-        Debug.Log("Die");
-        //Destroy(gameObject);
+        vertical = Input.GetAxis("Vertical");
+        horizontal = Input.GetAxis("Horizontal");
+        breaking = Input.GetKey(KeyCode.Space) ? 1 : 0;
     }
 }

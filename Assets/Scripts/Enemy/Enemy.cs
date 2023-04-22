@@ -1,17 +1,19 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-
-public class Enemy : MonoBehaviour
+﻿using UnityEngine;
+public class Enemy : Car
 {
     private EnemyAI _ai;
 
     public void Init(EnemyAI ai) => _ai = ai;
 
-    private void FixedUpdate()
+    protected override void GetMovementInputs(out float vertical, out float horizontal, out float breaking)
     {
-        //Vector2 moveVector = _ai.GetMoveVector();
+        vertical = 0;// Input.GetAxis("Vertical");
+        horizontal = 0;// Input.GetAxis("Horizontal");
+        breaking = 0;//Input.GetKey(KeyCode.Space) ? 1 : 0;
+    }
 
-        //_movement.ApplyInputs(moveVector.x, moveVector.y);
+    private void GetBounds()
+    {
+        
     }
 }
