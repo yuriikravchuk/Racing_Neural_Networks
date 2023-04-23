@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 namespace AI
@@ -7,31 +8,34 @@ namespace AI
     {
         private const float _minWeight = 0f, _maxWeight = 1f, _mutationRate = 0.01f;
 
-        public void UniformCross(NeuralNetwork father, NeuralNetwork mother, NeuralNetwork[] children)
+        public void UniformCross(NeuralNetwork[] parents, NeuralNetwork[] children)
         {
-            float[][,] fatherWeights = father.CopyWeights();
-            float[][,] motherWeights = mother.CopyWeights();
-            NeuralNetworkParameters parameters = father.Parameters;
-            for (int childIndex = 0; childIndex < children.Length; childIndex++)
-            {
-                var childWeights = new float[parameters.LayersCount - 1][,];
-                for (int layerIndex = 0; layerIndex < parameters.LayersCount-1; layerIndex++)
-                {
-                    int neuronsCount = fatherWeights[layerIndex].GetLength(0);
-                    int neuronsCountInChild = fatherWeights[layerIndex].GetLength(1);
+            IEnumerable<float[][,]> parentsWeights = parents.Select(parent => parent.CopyWeights());
+            NeuralNetworkParameters parameters = parents[0].Parameters;
+            foreach(var child in children)
+                UniformCross(parentsWeights, child);
+        }
 
-                    for (int x = 0; x < neuronsCount; x++)
+        private void UniformCross(IEnumerable<float[][,]> parentsWeights, NeuralNetwork child)
+        {
+            var childWeights = child.CopyWeights();
+            for (int layerIndex = 0; layerIndex < child.Parameters.LayersCount - 1; layerIndex++)
+            {
+                int neuronsCount = childWeights[layerIndex].GetLength(0);
+                int neuronsCountInChild = childWeights[layerIndex].GetLength(1);
+
+                for (int x = 0; x < neuronsCount; x++)
+                {
+                    for (int y = 0; y < neuronsCountInChild; y++)
                     {
-                        for (int y = 0; y < neuronsCountInChild; y++)
-                        {
-                            float weight = GetRandomOfTwo(fatherWeights[layerIndex][x, y], motherWeights[layerIndex][x, y]);
-                            TryMutate(ref weight);
-                            childWeights[layerIndex][x, y] = weight;
-                        }
+                        float[] valuesFromParents = parentsWeights.Select(item => item[layerIndex][x, y]).ToArray();
+                        float weight = GetRandomValue(valuesFromParents);
+                        TryMutate(ref weight);
+                        childWeights[layerIndex][x, y] = weight;
                     }
                 }
-                children[childIndex].SetWeights(childWeights);
             }
+            child.SetWeights(childWeights);
         }
 
         public void SetRandomWeights(NeuralNetwork[] networks)
@@ -78,8 +82,18 @@ namespace AI
         private float GetRandomWeight() 
             => Random.Range(_minWeight, _maxWeight);
 
-        private float GetRandomOfTwo(float first, float second) 
-            => Random.Range(0f, 1f) > 0.5 ? first : second;
+        private float GetRandomValue(float[] values)
+        {
+            float randomValue = Random.Range(0f, 1f);
+            float chanceStep = 1f / values.Length;
+
+            for (int i = 0; i < values.Length; i++)
+            {
+                if (chanceStep * (i + 1) >= randomValue)
+                    return values[i];
+            }
+            throw new System.IndexOutOfRangeException();
+        }
 
         private void TryMutate(ref float value)
         {

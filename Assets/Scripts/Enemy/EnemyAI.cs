@@ -2,7 +2,7 @@
 using AI;
 public class EnemyAI : NeuralNetwork
 {
-    public int Points;
+
 
     public EnemyAI() : base(new NeuralNetworkParameters())
     {

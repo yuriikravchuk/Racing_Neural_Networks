@@ -29,6 +29,7 @@ Transform:
   m_LocalRotation: {x: 7.1054274e-15, y: 0.06490341, z: -0.0000000028370177, w: 0.99789155}
   m_LocalPosition: {x: -131, y: 0, z: 69}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 2757926313767303924}
   m_RootOrder: 0
@@ -71,7 +72,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 24bae1ada154bd9418ebeda181fcd70c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _colliders: []
+  _colliders:
+  - {fileID: 2435504170021013916}
+  - {fileID: 2435504170021013915}
 --- !u!1 &3246479546076962894
 GameObject:
   m_ObjectHideFlags: 0
@@ -101,6 +104,7 @@ Transform:
   m_LocalRotation: {x: 0.000000021855694, y: 0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 50}
   m_LocalScale: {x: 0.0254, y: 0.0254, z: 0.0254}
+  m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 2435504170021013917}
   m_Father: {fileID: 0}
@@ -125,6 +129,7 @@ MeshRenderer:
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1

@@ -8,7 +8,7 @@ public class Borders : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        var instance = other.GetComponent<IDieable>();
+        var instance = other?.GetComponent<IDieable>();
         if (instance != null)
         {
             instance.Die();

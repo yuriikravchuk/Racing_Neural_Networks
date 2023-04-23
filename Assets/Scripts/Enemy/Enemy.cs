@@ -1,19 +1,42 @@
-﻿using UnityEngine;
+﻿using AI;
+using System;
+using System.Collections.Generic;
+using UnityEngine;
 public class Enemy : Car
 {
-    private EnemyAI _ai;
+    [SerializeField] private List<Transform> _rayPositions;
 
-    public void Init(EnemyAI ai) => _ai = ai;
+    public NeuralNetwork Ai { get; private set; }
+    public event Action<Enemy> Died;
+    public event Action ScoreChanged;
+    public int Score { get; private set; }
+    public void Init(NeuralNetworkParameters AIParameeters = new NeuralNetworkParameters()) => Ai = new NeuralNetwork(AIParameeters);
+
+    public void AddScore(int value)
+    {
+        if(value <= 0)
+            throw new ArgumentOutOfRangeException();
+
+        Score = value;
+        ScoreChanged?.Invoke();
+    }
 
     protected override void GetMovementInputs(out float vertical, out float horizontal, out float breaking)
     {
-        vertical = 0;// Input.GetAxis("Vertical");
-        horizontal = 0;// Input.GetAxis("Horizontal");
-        breaking = 0;//Input.GetKey(KeyCode.Space) ? 1 : 0;
+        ShowRay();
+        vertical = 0;
+        horizontal = 0;
+        breaking = 0;
     }
 
-    private void GetBounds()
+    protected override void OnDie()
     {
-        
+        Died?.Invoke(this);
+    }
+
+    private void ShowRay()
+    {
+        foreach (var point in _rayPositions)
+            Debug.DrawLine(point.transform.position, point.transform.forward * 100, Color.red);
     }
 }

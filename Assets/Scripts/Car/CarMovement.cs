@@ -1,6 +1,4 @@
-﻿using System;
-using UnityEngine;
-using UnityEngine.Events;
+﻿using UnityEngine;
 
 public class CarMovement : MonoBehaviour
 {
@@ -10,21 +8,19 @@ public class CarMovement : MonoBehaviour
     [SerializeField] private WheelCollider _colliderBR;
 
     [SerializeField] private float _breakForce;
-    [SerializeField] private float _maxForce;
-    [SerializeField] private float _maxAngle;
-
-    public event Action<Enemy> Died;
+    [SerializeField] private float _maxMotorForce;
+    [SerializeField] private float _maxRotateAngle;
 
     public void Move(float vertical)
     {
-        _colliderFL.motorTorque = _maxForce * vertical;
-        _colliderFR.motorTorque = _maxForce * vertical;
+        _colliderFL.motorTorque = _maxMotorForce * vertical;
+        _colliderFR.motorTorque = _maxMotorForce * vertical;
     }
 
     public void Rotate(float horizontal)
     {
-        _colliderFL.steerAngle = horizontal * _maxAngle;
-        _colliderFR.steerAngle = horizontal * _maxAngle;
+        _colliderFL.steerAngle = horizontal * _maxRotateAngle;
+        _colliderFR.steerAngle = horizontal * _maxRotateAngle;
     }
 
     public void ApplyBreaking(float breakForce)
@@ -34,6 +30,4 @@ public class CarMovement : MonoBehaviour
         _colliderBL.brakeTorque = breakForce;
         _colliderBR.brakeTorque = breakForce;
     }
-
-
 }

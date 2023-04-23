@@ -1,46 +1,55 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
-using AI;
-using pool;
+using System.Linq;
 
-public class AITrainer : MonoBehaviour
+namespace AI
 {
-    [SerializeField] private Vector3 startPosition;
-    [SerializeField] private int _populationCount;
-    private IObjectProvider<Enemy> _enemiesProvider;
-    private List<Enemy> _enemies;
-
-    private List<NeuralNetwork> _bestNetworks;
-    public void Init(IObjectProvider<Enemy> enemiesProvider, List<NeuralNetwork> bestAI = null)
+    public class AITrainer : MonoBehaviour
     {
-        _enemiesProvider = enemiesProvider;
-        _bestNetworks = bestAI == null ? new List<NeuralNetwork>() : bestAI;
-    }
-
-
-    public void StartTraining()
-    {
-        for(int i = 0; i < _populationCount; i++)
+        [SerializeField] private Vector3 startPosition;
+        [SerializeField] private int _populationCount = 10;
+        private IObjectProvider<Enemy> _enemiesProvider;
+        private List<Enemy> _enemies;
+        private List<TrainingResults> _results;
+        private WeightsBalancer _weightsBalancer;
+        private TrainingResults[] _bestResults;
+        public void Init(IObjectProvider<Enemy> enemiesProvider, TrainingResults[] bestResults = null)
         {
-            Enemy enemy = _enemiesProvider.Get();
-
-            _enemies.Add(enemy);
+            _enemiesProvider = enemiesProvider;
+            _bestResults = bestResults ?? new TrainingResults[2];
         }
-    }
 
-    private void GetBestAI()
-    {
-        int[] bestScores = new int[3];
-
-        foreach (var network in _enemies)
+        public void StartTraining()
         {
+            for (int i = 0; i < _populationCount; i++)
+            {
+                Enemy enemy = _enemiesProvider.Get();
+                enemy.Died += OnEnemyDie;
+                _enemies.Add(enemy);
+            }
+
 
         }
-    }
 
-    private void OnEnemyDie(IDieable car)
-    {
+        public void EndTraining()
+        {
+            foreach (var enemy in _enemies)
+                enemy.Die();
 
+            _bestResults = GetBestResults();
+
+        }
+
+        private TrainingResults[] GetBestResults()
+        {
+            _results.OrderBy(element => element.Score);
+            return _results.Take(2).ToArray();
+        }
+
+        private void OnEnemyDie(Enemy enemy)
+        {
+            _enemies.Remove(enemy);
+            _results.Add(new TrainingResults(enemy.Ai.CopyWeights(), enemy.Score));
+        }
     }
 }
