@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 
 namespace AI
 {
@@ -13,7 +14,7 @@ namespace AI
             _layers = new Layer[Parameters.LayersCount];
             _layers[0] = new Layer(Parameters.InputsCount);
 
-            for (int i = 1; i < Parameters.LayersCount - 1;)
+            for (int i = 1; i < Parameters.LayersCount - 1; i++)
                 _layers[i] = new Layer(Parameters.NeuronsInHidenLayersCount, _layers[i - 1]);
 
             var output = new Layer(Parameters.OutputsCount, _layers[Parameters.LayersCount - 2]);
@@ -21,7 +22,7 @@ namespace AI
             _layers[Parameters.LayersCount - 1] = output;
         }
 
-        public void GetOutputs(float[] inputs)
+        public float[] GetOutputs(float[] inputs)
         {
             if (inputs.Length != _layers[0].NeuronsCount)
                 throw new ArgumentOutOfRangeException();
@@ -31,6 +32,8 @@ namespace AI
 
             for (int i = 1; i < Parameters.LayersCount; i++)
                 _layers[i].Update();
+
+            return (float[])_layers.Last().Values.Clone();
         }
 
         public float[][,] CopyWeights()
@@ -46,7 +49,7 @@ namespace AI
 
         public void SetWeights(float[][,] weights)
         {
-            for (int i = 0; i < Parameters.LayersCount - 1;)
+            for (int i = 0; i < Parameters.LayersCount - 1; i++)
                 _layers[i + 1].Weights = weights[i];
         }
     }

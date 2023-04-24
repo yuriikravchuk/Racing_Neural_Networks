@@ -17,7 +17,7 @@ namespace pool
 
 		public T Get()
 		{
-			T result = _objects.Find(item => item.isActiveAndEnabled) ?? Create();
+			T result = _objects.Find(item => item.isActiveAndEnabled == false) ?? Create();
 			result.gameObject.SetActive(true);
 			return result;
 		}

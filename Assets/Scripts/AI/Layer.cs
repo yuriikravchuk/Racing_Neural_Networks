@@ -45,5 +45,8 @@ namespace AI
 
         private float Sigmoid(float x)
             => 1.0f / (1.0f + (float)Math.Exp(-x));
+
+        private float Tanh(float x)
+            => 2.0f / (1.0f + (float)Math.Exp(-2.0f * x)) - 1.0f;
     }
 }
