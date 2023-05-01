@@ -472,7 +472,7 @@ MonoBehaviour:
   _colliderBL: {fileID: 9206085693806743377}
   _colliderBR: {fileID: 9206085694013870324}
   _breakForce: 1000
-  _maxMotorForce: 300
+  _maxMotorForce: 250
   _maxRotateAngle: 45
 --- !u!114 &8750496111766240524
 MonoBehaviour:

@@ -1,14 +1,14 @@
-﻿namespace AI
+﻿using System.Collections.Generic;
+
+namespace AI
 {
     public struct NeuralNetworkParameters
     {
-        public readonly int InputsCount, OutputsCount, LayersCount, NeuronsInHidenLayersCount;
-        public NeuralNetworkParameters(int inputsCount, int outputsCount, int layersCount, int neuronsInHidenLayersCount)
+        public readonly IReadOnlyList<int> NeuronsInLayerCount;
+        public int LayersCount => NeuronsInLayerCount.Count;
+        public NeuralNetworkParameters(int[] neuronsInLayerCount)
         {
-            InputsCount = inputsCount;
-            OutputsCount = outputsCount;
-            LayersCount = layersCount;
-            NeuronsInHidenLayersCount = neuronsInHidenLayersCount;
+            NeuronsInLayerCount = neuronsInLayerCount;
         }
     }
 }

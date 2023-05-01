@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
+using System;
 
 namespace AI
 {
@@ -11,35 +12,44 @@ namespace AI
         [SerializeField] private int _randomPopulationCount = 10;
         [SerializeField] private CheckpointsPath _checkpointsPath;
 
-
         private WeightsBalancer _weightsBalancer;
         private IObjectProvider<Enemy> _enemiesProvider;
-
         private List<Enemy> _enemies;
         private List<TrainingResults> _results;
-        private List<float[][,]> _bestWeights;
+        private List<Neuron[][]> _best;
 
 
         private float _iteratiomCount;
 
-        public void Init(IObjectProvider<Enemy> enemiesProvider, List<float[][,]> bestWeights = null)
+        public void Init(IObjectProvider<Enemy> enemiesProvider, List<Neuron[][]> bestWeights = null)
         {
             _weightsBalancer = new WeightsBalancer();
             _enemiesProvider = enemiesProvider;
             _enemies = new List<Enemy>();
             _results = new List<TrainingResults>();
-            _bestWeights = bestWeights;
-            //Time.timeScale = 10f;
+            _best = bestWeights;
         }
 
         public void StartTraining()
         {
             _enemies.Clear();
             _results.Clear();
-            //_results = new List<TrainingResults>();
+            SpawnBest();
             SpawnMainPopulation();
             SpawnRandomPopulation();
             _iteratiomCount++;
+        }
+
+        private void SpawnBest()
+        {
+            if (_best == null)
+                return;
+
+            foreach (var weights in _best)
+            {
+                Enemy enemy = GetEnemy();
+                enemy.Ai.SetNeurons(weights);
+            }
         }
 
         private void SpawnRandomPopulation()
@@ -47,7 +57,8 @@ namespace AI
             for (int i = 0; i < _randomPopulationCount; i++)
             {
                 Enemy enemy = GetEnemy();
-                _weightsBalancer.SetRandomWeights(enemy.Ai);
+                enemy.Ai.SetNeurons(_weightsBalancer.GetRandomNeurons(enemy.Ai.Parameters));
+                //_weightsBalancer.SetRandomNeurons(enemy.Ai);
             }
         }
 
@@ -56,11 +67,11 @@ namespace AI
             for (int i = 0; i < _populationCount; i++)
             {
                 Enemy enemy = GetEnemy();
+                var neurons = _best == null || _best.Count < 2
+                    ? _weightsBalancer.GetRandomNeurons(enemy.Ai.Parameters) 
+                    : _weightsBalancer.UniformCross(_best);
 
-                if (_bestWeights == null)
-                    _weightsBalancer.SetRandomWeights(enemy.Ai);
-                else
-                    _weightsBalancer.UniformCross(_bestWeights, enemy.Ai);
+                enemy.Ai.SetNeurons(neurons);
             }
         }
 
@@ -78,22 +89,21 @@ namespace AI
         public void EndTraining()
         {
             foreach (var enemy in _enemies)
-            {
                 enemy.Die();
-            }
-            var sortedByScore = _results.OrderByDescending(element => element.Score).ToList();
-            _bestWeights = sortedByScore.Take(2).Select(element => element.Weights).ToList();
 
-            Debug.Log(sortedByScore[0].Score.ToString() + " "+ sortedByScore[1].Score.ToString());
+            var sortedByScore = _results.OrderByDescending(element => element.Score).ToList();
+            _best = sortedByScore.Take(2).Select(element => element.Neurons).ToList();
+
+            //Debug.Log(sortedByScore[0].Score.ToString() + " "+ sortedByScore[1].Score.ToString());
             //Debug.Log("Best: " + _results[0].Score.ToString() + "Count: " + _iteratiomCount.ToString());
-            
+            Debug.Log("Count: " + _iteratiomCount.ToString());
             StartTraining();
         }
 
         private void OnEnemyDie(Enemy enemy)
         {
             _enemies.Remove(enemy);
-            _results.Add(new TrainingResults(enemy.Ai.CopyWeights(), enemy.Score));
+            _results.Add(new TrainingResults(enemy.Ai.CopyNeurons(), enemy.Score));
             enemy.Died -= OnEnemyDie;
             if (_enemies.Count == 0)
                 EndTraining();

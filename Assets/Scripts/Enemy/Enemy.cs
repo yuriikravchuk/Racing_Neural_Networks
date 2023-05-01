@@ -12,12 +12,14 @@ public class Enemy : Car
     public event Action<Enemy> Died;
     public event Action ScoreChanged;
 
-    private NeuralNetworkParameters _networkParameters = new NeuralNetworkParameters(4, 4, 5, 5);
+    private NeuralNetworkParameters _networkParameters;
     private IReadOnlyList<Checkpoint> _path;
     private int _checkpointIndex;
     
     public void Init(IReadOnlyList<Checkpoint> path)
     {
+        var neuronsCount = new int[] { _rayPositions.Count + 3, 4, 4, 4 };
+        _networkParameters = new(neuronsCount);
         Ai = new NeuralNetwork(_networkParameters);
         _path = path;
     }
@@ -35,6 +37,12 @@ public class Enemy : Car
 
         Score += value;
         ScoreChanged?.Invoke();
+        _checkpointIndex++;
+        if(_checkpointIndex >= _path.Count)
+        {
+            Score += 20;
+            Die();
+        }
     }
 
     protected override void GetMovementInputs(out float vertical, out float horizontal, out float breaking)
@@ -42,7 +50,9 @@ public class Enemy : Car
         List<float> inputs = new();
         inputs.AddRange(GetDistancesToBorders());
         inputs.Add(GetDistanceToCheckpoint());
-        float[] outputs = Ai.GetOutputs(inputs.ToArray());
+        inputs.Add(Speed);
+        inputs.Add(GetCheckpointRotationDifference());
+        IReadOnlyList<float> outputs = Ai.GetOutputs(inputs);
         vertical = outputs[0] - outputs[1];
         horizontal = outputs[2] - outputs[3];
         breaking = 0;
@@ -51,7 +61,6 @@ public class Enemy : Car
 
     protected override void OnDie()
     {
-        //Score -= GetDistanceToCheckpoint();
         Died?.Invoke(this);
     }
 
@@ -72,5 +81,6 @@ public class Enemy : Car
         return result;
     }
 
+    private float GetCheckpointRotationDifference() => Quaternion.Angle(_path[_checkpointIndex].transform.rotation, transform.rotation);
     private float GetDistanceToCheckpoint() => Vector3.Distance(_path[_checkpointIndex].transform.position, transform.position);
 }

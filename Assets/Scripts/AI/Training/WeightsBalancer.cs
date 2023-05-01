@@ -6,55 +6,74 @@ namespace AI
 {
     public class WeightsBalancer
     {
-        private const float _minWeight = -1f, _maxWeight = 1f, _mutationRate = 0.05f;
-
-        public void UniformCross(IEnumerable<float[][,]> parentsWeights, NeuralNetwork child)
+        private const float _minWeight = -1f, _maxWeight = 1f, _mutationRate = 0.01f, _minBias = -1, _maxBias = 1;
+        public Neuron[][] UniformCross(IReadOnlyList<Neuron[][]> parents)
         {
-            var childWeights = child.CopyWeights();
-            for (int layerIndex = 0; layerIndex < childWeights.Length; layerIndex++)
+            var firstParrent = parents[0];
+            int layersCount = firstParrent.Length;
+            var result = new Neuron[layersCount][];
+
+            result[0] = new Neuron[firstParrent[0].Length];
+
+            for (int i = 0; i < result[0].Length; i++)
+                result[0][i] = new Neuron();
+
+            for (int layerIndex = 1; layerIndex < layersCount; layerIndex++)
             {
-                int neuronsCount = childWeights[layerIndex].GetLength(0);
-                int neuronsCountInChild = childWeights[layerIndex].GetLength(1);
+                int neuronsCount = firstParrent[layerIndex].Length;
+                int neuronsCountInChild = firstParrent[layerIndex - 1].Length;
+                result[layerIndex] = new Neuron[neuronsCount];
 
                 for (int x = 0; x < neuronsCount; x++)
                 {
+                    float[] weights = new float[neuronsCountInChild];
                     for (int y = 0; y < neuronsCountInChild; y++)
                     {
-                        float[] valuesFromParents = parentsWeights.Select(item => item[layerIndex][x, y]).ToArray();
-                        float weight = GetRandomOfValues(valuesFromParents);
+                        float[] weightsFromParents = parents.Select(item => item[layerIndex][x].Weights[y]).ToArray();
+                        float weight = GetRandomValue(weightsFromParents);
                         TryMutate(ref weight);
-                        childWeights[layerIndex][x, y] = weight;
+                        
                     }
+                    float[] parentBiases = parents.Select(item => item[layerIndex][x].Bias).ToArray();
+                    float bias = GetRandomValue(parentBiases);
+                    result[layerIndex][x] = new Neuron(weights, bias);
                 }
-            }
-            child.SetWeights(childWeights);
+            } 
+            return result;
         }
 
-        public void SetRandomWeights(NeuralNetwork networks)
+        public Neuron[][] GetRandomNeurons(NeuralNetworkParameters parameters)
         {
-            var weights = networks.CopyWeights();
-            for (int layerIndex = 0; layerIndex < weights.Length; layerIndex++)
+            var result = new Neuron[parameters.LayersCount][];
+            result[0] = new Neuron[parameters.NeuronsInLayerCount[0]];
+
+            for(int i = 0; i < parameters.NeuronsInLayerCount[0]; i++)
+                result[0][i] = new Neuron();
+
+            for (int layerIndex = 1; layerIndex < parameters.LayersCount; layerIndex++)
             {
-                int neuronsCount = weights[layerIndex].GetLength(0);
-                int neuronsCountInChildLayer = weights[layerIndex].GetLength(1);
+                result[layerIndex] = new Neuron[parameters.NeuronsInLayerCount[layerIndex]];
+                int neuronsCount = result[layerIndex].Length;
+                int neuronsCountInChild = result[layerIndex - 1].Length;
+
 
                 for (int x = 0; x < neuronsCount; x++)
                 {
-                    for (int y = 0; y < neuronsCountInChildLayer; y++)
-                    {
-                        weights[layerIndex][x, y] = GetRandomWeight();
-                    }
+                    var neuronWeights = new float[neuronsCountInChild];
+
+                    for (int y = 0; y < neuronsCountInChild; y++)
+                        neuronWeights[y] = GetRandomInRange(_minWeight, _maxWeight);
+
+                    float bias = GetRandomInRange(_minBias, _maxBias);
+                    result[layerIndex][x] = new Neuron(neuronWeights, bias);
                 }
             }
-            networks.SetWeights(weights);
+            return result;
         }
 
-        private float GetRandomWeight() 
-            => GetRandomValue(_minWeight, _maxWeight);
-
-        private float GetRandomOfValues(float[] values)
+        private float GetRandomValue(float[] values)
         {
-            float randomValue = GetRandomValue(0f, 1f);
+            float randomValue = GetRandomInRange(0f, 1f);
             float chanceStep = 1f / values.Length;
 
             for (int i = 0; i < values.Length; i++)
@@ -67,16 +86,10 @@ namespace AI
 
         private void TryMutate(ref float value)
         {
-            if (Random.Range(0f, 1f) <= _mutationRate)
-                value = GetRandomWeight();
+            if (GetRandomInRange(0f, 1f) <= _mutationRate)
+                value = GetRandomInRange(_minWeight, _maxWeight);
         }
 
-        private float GetRandomValue(float first, float second)
-        {
-            //int seed = (int)System.DateTime.Now.Ticks;
-            //Random.InitState(seed);
-
-            return Random.Range(first, second);
-        }
+        private float GetRandomInRange(float first, float second) => Random.Range(first, second);
     }
 }

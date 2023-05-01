@@ -3,9 +3,11 @@
 public abstract class Car : MonoBehaviour, IDieable
 {
     [SerializeField] private CarMovement _movement;
+    [SerializeField] private Rigidbody _rigidbody;
+    
+    public float Speed => _rigidbody.velocity.magnitude;
 
     private float _vertical, _horizontal, _breaking;
-
     private void FixedUpdate()
     {
         GetMovementInputs(out _vertical, out _horizontal, out _breaking);

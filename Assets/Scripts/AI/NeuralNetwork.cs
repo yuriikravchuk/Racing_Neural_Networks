@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
+using System.Security.Cryptography;
 
 namespace AI
 {
@@ -12,45 +14,61 @@ namespace AI
         {
             Parameters = parameters;
             _layers = new Layer[Parameters.LayersCount];
-            _layers[0] = new Layer(Parameters.InputsCount);
-
-            for (int i = 1; i < Parameters.LayersCount - 1; i++)
-                _layers[i] = new Layer(Parameters.NeuronsInHidenLayersCount, _layers[i - 1]);
-
-            var output = new Layer(Parameters.OutputsCount, _layers[Parameters.LayersCount - 2]);
-
-            _layers[Parameters.LayersCount - 1] = output;
-        }
-
-        public float[] GetOutputs(float[] inputs)
-        {
-            if (inputs.Length != _layers[0].NeuronsCount)
-                throw new ArgumentOutOfRangeException();
-
-            for (int i = 0; i < _layers[0].NeuronsCount; i++)
-                _layers[0].Values[i] = inputs[i];
+            _layers[0] = new Layer(Parameters.NeuronsInLayerCount[0]);
 
             for (int i = 1; i < Parameters.LayersCount; i++)
-                _layers[i].Update();
-
-            return (float[])_layers.Last().Values.Clone();
+                _layers[i] = new Layer(Parameters.NeuronsInLayerCount[i], _layers[i - 1]);
         }
 
-        public float[][,] CopyWeights()
+        public IReadOnlyList<float> GetOutputs(IReadOnlyList<float> inputs)
         {
-            var weights = new float[Parameters.LayersCount - 1][,];
-            for (int i = 1; i < _layers.Length; i++)
+            if (inputs.Count != _layers[0].NeuronsCount)
+                throw new ArgumentOutOfRangeException();
+
+            _layers[0].Update(inputs);
+
+            for (int i = 1; i < Parameters.LayersCount; i++)
+                _layers[i].Update(_layers[i-1].Values);
+
+            return _layers.Last().Values;
+        }
+
+        public Neuron[][] CopyNeurons()
+        {
+            var neurons = new Neuron[Parameters.LayersCount][];
+            for (int i = 0; i < _layers.Length; i++)
             {
-                float[,] weightsInLayer = (float[,])_layers[i].Weights.Clone();
-                weights[i - 1] = weightsInLayer;
+                Neuron[] neuronsInLayer = _layers[i].CopyNeurons();
+                neurons[i] = neuronsInLayer;
             }
-            return weights;
+            return neurons;
         }
 
-        public void SetWeights(float[][,] weights)
+        public void SetNeurons(Neuron[][] neurons)
         {
-            for (int i = 0; i < Parameters.LayersCount - 1; i++)
-                _layers[i + 1].Weights = weights[i];
+            for (int i = 0; i < _layers.Length; i++)
+                _layers[i].SetNeurons(neurons[i]);
+        }
+    }
+
+    public class Neuron
+    {
+        public IReadOnlyList<float> Weights => _weights;
+        public float Bias { get; private set; }
+        public float Value;
+
+        private float[] _weights;
+
+        public Neuron(int childsCount = 0) {
+            _weights = new float[childsCount];
+        }
+
+        public Neuron(IReadOnlyList<float> weights, float bias) : this(weights.Count)
+        {
+            for (int i = 0; i < weights.Count; i++)
+                _weights[i] = weights[i];
+
+            Bias = bias;
         }
     }
 }

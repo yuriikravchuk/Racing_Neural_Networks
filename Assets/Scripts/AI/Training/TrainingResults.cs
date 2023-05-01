@@ -2,12 +2,12 @@
 {
     public struct TrainingResults
     {
-        public readonly float[][,] Weights;
+        public readonly Neuron[][] Neurons;
         public readonly int Score;
 
-        public TrainingResults(float[][,] weights, int score)
+        public TrainingResults(Neuron[][] neurons, int score)
         {
-            Weights = weights;
+            Neurons = neurons;
             Score = score;
         }
     }
