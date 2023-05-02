@@ -8,19 +8,16 @@ public class Enemy : Car
     [SerializeField] private List<Transform> _rayPositions;
 
     public NeuralNetwork Ai { get; private set; }
-    public int Score { get; private set; }
+    public float Score { get; private set; }
     public event Action<Enemy> Died;
     public event Action ScoreChanged;
 
-    private NeuralNetworkParameters _networkParameters;
     private IReadOnlyList<Checkpoint> _path;
     private int _checkpointIndex;
     
-    public void Init(IReadOnlyList<Checkpoint> path)
+    public void Init(IReadOnlyList<Checkpoint> path, IReadOnlyList<int> LayersSize)
     {
-        var neuronsCount = new int[] { _rayPositions.Count + 3, 4, 4, 4 };
-        _networkParameters = new(neuronsCount);
-        Ai = new NeuralNetwork(_networkParameters);
+        Ai = new NeuralNetwork(LayersSize);
         _path = path;
     }
 
@@ -53,14 +50,16 @@ public class Enemy : Car
         inputs.Add(Speed);
         inputs.Add(GetCheckpointRotationDifference());
         IReadOnlyList<float> outputs = Ai.GetOutputs(inputs);
-        vertical = outputs[0] - outputs[1];
-        horizontal = outputs[2] - outputs[3];
+        vertical = outputs[0];
+        horizontal = outputs[1];
         breaking = 0;
-        //Debug.Log("in: " + inputs[0].ToString() + " " + inputs[1].ToString() + " " + inputs[2].ToString() + "\n out: v:" + vertical.ToString() + " h: " + horizontal.ToString() + " b: " + breaking.ToString());
+        //Debug.Log("in: " + inputs[0].ToString() + " " + inputs[1].ToString() + " " + inputs[2].ToString() + inputs[3].ToString() + " " + inputs[4].ToString() + " " + inputs[5].ToString() + " " + inputs[6].ToString() + " " + inputs[7].ToString() + " " + "\n out: v:" + vertical.ToString() + " h: " + horizontal.ToString() + " b: " + breaking.ToString());
+        //Debug.Log("v:" + vertical.ToString() + " h: " + horizontal.ToString());
     }
 
     protected override void OnDie()
     {
+        Score -= GetDistanceToCheckpoint() / 100;
         Died?.Invoke(this);
     }
 
@@ -69,12 +68,10 @@ public class Enemy : Car
         var result = new float[_rayPositions.Count];
         for(int i = 0; i < _rayPositions.Count; i++)
         {
-            Ray ray = new Ray(_rayPositions[i].transform.position, _rayPositions[i].transform.forward);
+            Ray ray = new(_rayPositions[i].transform.position, _rayPositions[i].transform.forward);
+
             if(Physics.Raycast(ray, out RaycastHit hit))
-            {
-                float distance = hit.distance;
-                result[i] = distance;
-            }
+                result[i] = hit.distance;
 
             //Debug.DrawLine(_rayPositions[i].transform.position, _rayPositions[i].transform.forward * 100, Color.white, 0.01f ,true);
         }

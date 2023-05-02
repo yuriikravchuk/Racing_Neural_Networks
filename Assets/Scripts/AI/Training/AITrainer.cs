@@ -14,20 +14,20 @@ namespace AI
 
         private WeightsBalancer _weightsBalancer;
         private IObjectProvider<Enemy> _enemiesProvider;
+        private IReadOnlyList<int> _layersSize;
         private List<Enemy> _enemies;
         private List<TrainingResults> _results;
         private List<Neuron[][]> _best;
-
-
         private float _iteratiomCount;
 
-        public void Init(IObjectProvider<Enemy> enemiesProvider, List<Neuron[][]> bestWeights = null)
+        public void Init(IObjectProvider<Enemy> enemiesProvider, List<Neuron[][]> best = null)
         {
             _weightsBalancer = new WeightsBalancer();
             _enemiesProvider = enemiesProvider;
             _enemies = new List<Enemy>();
             _results = new List<TrainingResults>();
-            _best = bestWeights;
+            _best = best;
+            _layersSize = new List<int>() { 8, 4, 4, 4, 4, 2 };
         }
 
         public void StartTraining()
@@ -57,8 +57,8 @@ namespace AI
             for (int i = 0; i < _randomPopulationCount; i++)
             {
                 Enemy enemy = GetEnemy();
-                enemy.Ai.SetNeurons(_weightsBalancer.GetRandomNeurons(enemy.Ai.Parameters));
-                //_weightsBalancer.SetRandomNeurons(enemy.Ai);
+                Neuron[][] neurons = _weightsBalancer.GetRandomNeurons(_layersSize);
+                enemy.Ai.SetNeurons(neurons);
             }
         }
 
@@ -68,7 +68,7 @@ namespace AI
             {
                 Enemy enemy = GetEnemy();
                 var neurons = _best == null || _best.Count < 2
-                    ? _weightsBalancer.GetRandomNeurons(enemy.Ai.Parameters) 
+                    ? _weightsBalancer.GetRandomNeurons(_layersSize) 
                     : _weightsBalancer.UniformCross(_best);
 
                 enemy.Ai.SetNeurons(neurons);
@@ -78,7 +78,7 @@ namespace AI
         private Enemy GetEnemy()
         {
             Enemy enemy = _enemiesProvider.Get();
-            enemy.Init(_checkpointsPath.Path);
+            enemy.Init(_checkpointsPath.Path, _layersSize);
             enemy.Died += OnEnemyDie;
             _enemies.Add(enemy);
             enemy.transform.SetPositionAndRotation(startTransform.position, startTransform.rotation);
@@ -91,12 +91,11 @@ namespace AI
             foreach (var enemy in _enemies)
                 enemy.Die();
 
-            var sortedByScore = _results.OrderByDescending(element => element.Score).ToList();
-            _best = sortedByScore.Take(2).Select(element => element.Neurons).ToList();
+            _results = _results.OrderByDescending(element => element.Score).Take(6).ToList();
+            _best = _results.Take(2).Select(element => element.Neurons).ToList();
 
-            //Debug.Log(sortedByScore[0].Score.ToString() + " "+ sortedByScore[1].Score.ToString());
-            //Debug.Log("Best: " + _results[0].Score.ToString() + "Count: " + _iteratiomCount.ToString());
-            Debug.Log("Count: " + _iteratiomCount.ToString());
+            Debug.Log(_results[0].Score.ToString() + " "+ _results[1].Score.ToString());
+            //Debug.Log("Count: " + _iteratiomCount.ToString());
             StartTraining();
         }
 

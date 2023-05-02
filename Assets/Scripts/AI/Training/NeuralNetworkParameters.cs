@@ -4,11 +4,11 @@ namespace AI
 {
     public struct NeuralNetworkParameters
     {
-        public readonly IReadOnlyList<int> NeuronsInLayerCount;
-        public int LayersCount => NeuronsInLayerCount.Count;
+        public readonly IReadOnlyList<int> LayersSize;
+        public int LayersCount => LayersSize.Count;
         public NeuralNetworkParameters(int[] neuronsInLayerCount)
         {
-            NeuronsInLayerCount = neuronsInLayerCount;
+            LayersSize = neuronsInLayerCount;
         }
     }
 }
