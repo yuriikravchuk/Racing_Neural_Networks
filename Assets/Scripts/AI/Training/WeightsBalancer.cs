@@ -43,6 +43,7 @@ namespace AI
                     }
                     float[] parentBiases = parents.Select(item => item[layerIndex][x].Bias).ToArray();
                     float bias = GetRandomValue(parentBiases);
+                    TryMutate(ref bias);
                     result[layerIndex][x] = new Neuron(weights, bias);
                 }
             } 
@@ -89,6 +90,11 @@ namespace AI
             float random = GetRandomInRange(0f, 1f);
             if (random <= _mutationRate)
                 value = GetRandomInRange(_minWeight, _maxWeight);
+        }
+
+        private void Mutate()
+        {
+
         }
 
         //private float GetRandomInRange(float first, float second) => Random.Range(first, second);

@@ -5,14 +5,19 @@ public class SaveBinder
 
     public SaveBinder(WeightsBalancer trainer)
     {
-        _provider = new FileSaveProvider<BestAISave>();
+        _provider = new JsonSaveProvider<BestAISave>();
     }
 
 
-    public void Bind()
+    public void Load()
     {
         //BestAISave save = _provider.TryGetSave();
         //_level.Init(save.Level);
         //_wallet.Init(save.Money);
+    }
+
+    public void Save()
+    {
+
     }
 }

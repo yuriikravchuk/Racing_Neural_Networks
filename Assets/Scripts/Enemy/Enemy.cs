@@ -27,7 +27,7 @@ public class Enemy : Car
         Score = 0;
     }
 
-    public void AddPoints(int value)
+    public void AddPoints(float value)
     {
         if(value < 0)
             throw new ArgumentOutOfRangeException();
@@ -78,6 +78,13 @@ public class Enemy : Car
         return result;
     }
 
-    private float GetCheckpointRotationDifference() => Quaternion.Angle(_path[_checkpointIndex].transform.rotation, transform.rotation);
+    private float GetCheckpointRotationDifference()
+    {
+        var VectorToRotate = _path[_checkpointIndex].transform.position - transform.position;
+        Debug.DrawRay(transform.position, VectorToRotate);
+        //Debug.DrawLine(transform.position, _path[_checkpointIndex].transform.position);
+        return Vector3.Angle(transform.position, VectorToRotate);
+    }
+
     private float GetDistanceToCheckpoint() => Vector3.Distance(_path[_checkpointIndex].transform.position, transform.position);
 }
