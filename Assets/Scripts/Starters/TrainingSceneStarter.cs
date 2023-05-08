@@ -8,12 +8,14 @@ public class TrainingSceneStarter : MonoBehaviour
     [SerializeField] private AITrainer _aITrainer;
     [SerializeField] private float _timeScale = 1;
 
-    private Pool<Enemy> enemyProvider;
+    private Pool<Enemy> _enemyProvider;
+    private SaveBinder _saveBinder;
     
     private void Awake()
     {
-        enemyProvider = new Pool<Enemy>(_enemyPrefab);
-        _aITrainer.Init(enemyProvider);
+        _enemyProvider = new Pool<Enemy>(_enemyPrefab);
+        _saveBinder = new SaveBinder(new JsonSaveProvider<BestAISave>());
+        _aITrainer.Init(_enemyProvider);
     }
 
     private void OnValidate()

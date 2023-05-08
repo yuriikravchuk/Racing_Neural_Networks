@@ -1,17 +1,30 @@
 ﻿using System.Collections.Generic;
-using System.Diagnostics;
+using System;
 using System.Linq;
-using UnityEngine;
+//using UnityEngine;
 
 namespace AI
 {
     public class WeightsBalancer
     {
+        public IReadOnlyList<TrainingResults> Parents => _parents;
+
         private const float _minWeight = -1f, _maxWeight = 1f, _mutationRate = 0.001f, _minBias = -1, _maxBias = 1;
-        private System.Random _random;
+        private const int _maxParentsCount = 4;
+        private readonly Random _random;
+        private List<TrainingResults> _parents;
 
-        public WeightsBalancer() => _random = new System.Random();
+        public WeightsBalancer()
+        {
+            _random = new Random();
+            _parents = new List<TrainingResults>();
+        }
 
+        public void AddParents(IReadOnlyList<TrainingResults> parents)
+        {
+            _parents.AddRange(parents);
+            _parents = _parents.OrderByDescending(element => element.Score).Take(_maxParentsCount).ToList();
+        }
 
         public Neuron[][] UniformCross(IReadOnlyList<Neuron[][]> parents)
         {
@@ -90,11 +103,6 @@ namespace AI
             float random = GetRandomInRange(0f, 1f);
             if (random <= _mutationRate)
                 value = GetRandomInRange(_minWeight, _maxWeight);
-        }
-
-        private void Mutate()
-        {
-
         }
 
         //private float GetRandomInRange(float first, float second) => Random.Range(first, second);

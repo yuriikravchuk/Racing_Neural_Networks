@@ -1,11 +1,11 @@
 ﻿using AI;
 [System.Serializable]
-class BestAISave
+public class BestAISave
 {
-    public NeuralNetwork[] BestAi;
+    public readonly TrainingResults[] Save;
 
-    public BestAISave(NeuralNetwork[] bestAi)
+    public BestAISave(TrainingResults[] save)
     {
-        BestAi = bestAi;
+        Save = save;
     }
 }
