@@ -1,34 +1,31 @@
 ﻿using System.Collections.Generic;
 using System;
 using System.Linq;
-//using UnityEngine;
 
 namespace AI
 {
     public class WeightsBalancer
     {
-        public IReadOnlyList<TrainingResults> Parents => _parents;
-
+        public List<TrainingResults> Parents;
         private const float _minWeight = -1f, _maxWeight = 1f, _mutationRate = 0.001f, _minBias = -1, _maxBias = 1;
         private const int _maxParentsCount = 4;
         private readonly Random _random;
-        private List<TrainingResults> _parents;
 
         public WeightsBalancer()
         {
             _random = new Random();
-            _parents = new List<TrainingResults>();
+            Parents = new List<TrainingResults>();
         }
 
         public void AddParents(IReadOnlyList<TrainingResults> parents)
         {
-            _parents.AddRange(parents);
-            _parents = _parents.OrderByDescending(element => element.Score).Take(_maxParentsCount).ToList();
+            Parents.AddRange(parents);
+            Parents = Parents.OrderByDescending(element => element.Score).Take(_maxParentsCount).ToList();
         }
 
-        public Neuron[][] UniformCross(IReadOnlyList<Neuron[][]> parents)
+        public Neuron[][] UniformCross()
         {
-            var firstParrent = parents[0];
+            var firstParrent = Parents[0].Neurons;
             int layersCount = firstParrent.Length;
             var result = new Neuron[layersCount][];
 
@@ -48,13 +45,13 @@ namespace AI
                     float[] weights = new float[weightsCount];
                     for (int y = 0; y < weightsCount; y++)
                     {
-                        float[] weightsFromParents = parents.Select(item => item[layerIndex][x].Weights[y]).ToArray();
+                        float[] weightsFromParents = Parents.Select(item => item.Neurons[layerIndex][x].Weights[y]).ToArray();
                         float weight = GetRandomValue(weightsFromParents);
                         TryMutate(ref weight);
                         weights[y] = weight;
 
                     }
-                    float[] parentBiases = parents.Select(item => item[layerIndex][x].Bias).ToArray();
+                    float[] parentBiases = Parents.Select(item => item.Neurons[layerIndex][x].Bias).ToArray();
                     float bias = GetRandomValue(parentBiases);
                     TryMutate(ref bias);
                     result[layerIndex][x] = new Neuron(weights, bias);

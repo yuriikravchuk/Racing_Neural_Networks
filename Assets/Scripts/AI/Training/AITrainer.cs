@@ -18,17 +18,15 @@ namespace AI
         private IReadOnlyList<int> _layersSize;
  
         private List<TrainingResults> _results;
-        private List<Neuron[][]> _bestNeurons;
         private const int _minBestCount = 2, _maxBestCount = 4;
         private float _iteratiomCount;
 
-        public void Init(IObjectProvider<Enemy> enemiesProvider, List<Neuron[][]> best = null)
+        public void Init(IObjectProvider<Enemy> enemiesProvider, WeightsBalancer weightsBalancer, List<Neuron[][]> best = null)
         {
-            _weightsBalancer = new WeightsBalancer();
+            _weightsBalancer = weightsBalancer;
             _enemiesProvider = enemiesProvider;
             _enemies = new List<Enemy>();
             _results = new List<TrainingResults>();
-            _bestNeurons = best;
             _layersSize = new List<int>() { 8, 4, 4, 4, 4, 2 };
         }
 
@@ -44,11 +42,11 @@ namespace AI
 
         private void SpawnBest()
         {
-            if (_bestNeurons == null)
+            if (_weightsBalancer.Parents == null)
                 return;
 
-            foreach (var neurons in _bestNeurons)
-                SpawnEnemy(neurons);
+            foreach (var neurons in _weightsBalancer.Parents)
+                SpawnEnemy(neurons.Neurons);
 
         }
 
@@ -65,9 +63,9 @@ namespace AI
         {
             for (int i = 0; i < _populationCount; i++)
             {
-                var neurons = _bestNeurons == null || _bestNeurons.Count < _maxBestCount
+                Neuron[][] neurons = _weightsBalancer.Parents == null || _weightsBalancer.Parents.Count < 2
                     ? _weightsBalancer.GetRandomNeurons(_layersSize) 
-                    : _weightsBalancer.UniformCross(_bestNeurons);
+                    : _weightsBalancer.UniformCross();
                 SpawnEnemy(neurons);
             }
         }
@@ -95,8 +93,7 @@ namespace AI
         private void UpdateBestResults()
         {
             _results = _results.OrderByDescending(element => element.Score).ToList();
-            _bestNeurons = _results.Take(_maxBestCount).Select(element => element.Neurons).ToList();
-
+            _weightsBalancer.AddParents(_results.Take(_maxBestCount).ToList());
             Debug.Log(_results[0].Score.ToString() + " " + _results[1].Score.ToString());
         }
 
