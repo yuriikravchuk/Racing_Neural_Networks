@@ -15,11 +15,11 @@ public class TrainingSceneStarter : MonoBehaviour
     
     private void Awake()
     {
-        var saveProvider = new JsonSaveProvider<List<TrainingResults>>();
+        var saveProvider = new BinarySaveProvider<List<TrainingResults>>();
         WeightsBalancer weightsBalancer = new WeightsBalancer();
         _saveBinder = new SaveBinder(saveProvider, weightsBalancer);
+        _saveBinder.Load();
         _ui.SaveButtonClicked += _saveBinder.Save;
-        _ui.LoadButtonClicked += _saveBinder.Load;
 
         _enemyProvider = new Pool<Enemy>(_enemyPrefab);
         _aITrainer.Init(_enemyProvider, weightsBalancer);

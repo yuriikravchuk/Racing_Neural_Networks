@@ -1,5 +1,8 @@
-﻿namespace AI
+﻿using System;
+
+namespace AI
 {
+    [Serializable]
     public readonly struct TrainingResults
     {
         public readonly Neuron[][] Neurons;
