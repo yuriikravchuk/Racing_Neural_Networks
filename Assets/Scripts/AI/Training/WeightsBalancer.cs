@@ -7,7 +7,7 @@ namespace AI
     public class WeightsBalancer
     {
         public List<TrainingResults> Parents;
-        private const float _minWeight = -1f, _maxWeight = 1f, _mutationRate = 0.001f, _minBias = -1, _maxBias = 1;
+        private const float _minWeight = -1f, _maxWeight = 1f, _mutationRate = 0.002f, _minBias = -1, _maxBias = 1;
         private const int _maxParentsCount = 4;
         private readonly Random _random;
 
