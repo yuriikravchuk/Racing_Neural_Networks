@@ -86,5 +86,10 @@ public class Enemy : Car
         return Vector3.Angle(transform.position, VectorToRotate);
     }
 
-    private float GetDistanceToCheckpoint() => Vector3.Distance(_path[_checkpointIndex].transform.position, transform.position);
+    private float GetDistanceToCheckpoint()
+    {
+        var checkpointPosition = _path[_checkpointIndex].transform.position;
+        checkpointPosition.y = 0;
+        return Vector3.Distance(checkpointPosition, transform.position);
+    }
 }
