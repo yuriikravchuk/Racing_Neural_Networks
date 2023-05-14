@@ -110,8 +110,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 495a9019d84d32946b4c55a37d86ae79, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _maxPoints: 5
-  _minPoints: 0.05
+  Points: 1
 --- !u!1 &3037306069175296167
 GameObject:
   m_ObjectHideFlags: 0
@@ -222,8 +221,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 495a9019d84d32946b4c55a37d86ae79, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _maxPoints: 5
-  _minPoints: 0.05
+  Points: 1
 --- !u!1 &3037306069188269643
 GameObject:
   m_ObjectHideFlags: 0
@@ -334,8 +332,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 495a9019d84d32946b4c55a37d86ae79, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _maxPoints: 5
-  _minPoints: 0.05
+  Points: 1
 --- !u!1 &3037306069194714994
 GameObject:
   m_ObjectHideFlags: 0
@@ -446,8 +443,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 495a9019d84d32946b4c55a37d86ae79, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _maxPoints: 5
-  _minPoints: 0.05
+  Points: 1
 --- !u!1 &3037306069218180167
 GameObject:
   m_ObjectHideFlags: 0
@@ -558,8 +554,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 495a9019d84d32946b4c55a37d86ae79, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _maxPoints: 5
-  _minPoints: 0.05
+  Points: 1
 --- !u!1 &3037306069479722522
 GameObject:
   m_ObjectHideFlags: 0
@@ -670,8 +665,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 495a9019d84d32946b4c55a37d86ae79, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _maxPoints: 5
-  _minPoints: 0.05
+  Points: 1
 --- !u!1 &3037306069527267260
 GameObject:
   m_ObjectHideFlags: 0
@@ -782,8 +776,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 495a9019d84d32946b4c55a37d86ae79, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _maxPoints: 5
-  _minPoints: 0.05
+  Points: 1
 --- !u!1 &3037306069818350866
 GameObject:
   m_ObjectHideFlags: 0
@@ -894,8 +887,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 495a9019d84d32946b4c55a37d86ae79, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _maxPoints: 5
-  _minPoints: 0.05
+  Points: 1
 --- !u!1 &3037306069933748798
 GameObject:
   m_ObjectHideFlags: 0
@@ -1006,8 +998,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 495a9019d84d32946b4c55a37d86ae79, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _maxPoints: 5
-  _minPoints: 0.05
+  Points: 1
 --- !u!1 &3037306069961728809
 GameObject:
   m_ObjectHideFlags: 0
@@ -1118,8 +1109,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 495a9019d84d32946b4c55a37d86ae79, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _maxPoints: 5
-  _minPoints: 0.05
+  Points: 1
 --- !u!1 &3037306069975972654
 GameObject:
   m_ObjectHideFlags: 0
@@ -1230,8 +1220,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 495a9019d84d32946b4c55a37d86ae79, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _maxPoints: 5
-  _minPoints: 0.05
+  Points: 1
 --- !u!1 &3037306070080370064
 GameObject:
   m_ObjectHideFlags: 0
@@ -1241,6 +1230,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3037306070080370071}
+  - component: {fileID: 5631049309661848180}
   m_Layer: 0
   m_Name: map
   m_TagString: Untagged
@@ -1299,6 +1289,20 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &5631049309661848180
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3037306070080370064}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 628e3acd70c592f4bb2d801b10bdf5fe, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _checkpointsPath: {fileID: 3037306070991056596}
+  _startTransform: {fileID: 3037306070292916558}
 --- !u!1 &3037306070165184077
 GameObject:
   m_ObjectHideFlags: 0
@@ -1409,8 +1413,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 495a9019d84d32946b4c55a37d86ae79, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _maxPoints: 5
-  _minPoints: 0.05
+  Points: 1
 --- !u!1 &3037306070274107325
 GameObject:
   m_ObjectHideFlags: 0
@@ -1521,8 +1524,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 495a9019d84d32946b4c55a37d86ae79, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _maxPoints: 5
-  _minPoints: 0.05
+  Points: 1
 --- !u!1 &3037306070292916559
 GameObject:
   m_ObjectHideFlags: 0
@@ -1533,7 +1535,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3037306070292916558}
   m_Layer: 0
-  m_Name: StartPosition
+  m_Name: StartPoint
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1664,8 +1666,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 495a9019d84d32946b4c55a37d86ae79, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _maxPoints: 5
-  _minPoints: 0.05
+  Points: 1
 --- !u!1 &3037306070547284260
 GameObject:
   m_ObjectHideFlags: 0
@@ -1776,8 +1777,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 495a9019d84d32946b4c55a37d86ae79, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _maxPoints: 5
-  _minPoints: 0.05
+  Points: 1
 --- !u!1 &3037306070555238333
 GameObject:
   m_ObjectHideFlags: 0
@@ -1888,8 +1888,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 495a9019d84d32946b4c55a37d86ae79, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _maxPoints: 5
-  _minPoints: 0.05
+  Points: 1
 --- !u!1 &3037306070585213596
 GameObject:
   m_ObjectHideFlags: 0
@@ -2000,8 +1999,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 495a9019d84d32946b4c55a37d86ae79, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _maxPoints: 5
-  _minPoints: 0.05
+  Points: 1
 --- !u!1 &3037306070618910443
 GameObject:
   m_ObjectHideFlags: 0
@@ -2112,8 +2110,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 495a9019d84d32946b4c55a37d86ae79, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _maxPoints: 5
-  _minPoints: 0.05
+  Points: 1
 --- !u!1 &3037306070941454726
 GameObject:
   m_ObjectHideFlags: 0
@@ -2224,8 +2221,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 495a9019d84d32946b4c55a37d86ae79, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _maxPoints: 5
-  _minPoints: 0.05
+  Points: 1
 --- !u!1 &3037306070958022951
 GameObject:
   m_ObjectHideFlags: 0
@@ -2336,8 +2332,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 495a9019d84d32946b4c55a37d86ae79, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _maxPoints: 5
-  _minPoints: 0.05
+  Points: 1
 --- !u!1 &3037306070991056598
 GameObject:
   m_ObjectHideFlags: 0

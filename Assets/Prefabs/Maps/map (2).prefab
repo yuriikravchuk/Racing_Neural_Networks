@@ -110,8 +110,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 495a9019d84d32946b4c55a37d86ae79, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _maxPoints: 5
-  _minPoints: 0.5
+  Points: 1
 --- !u!1 &8960377812435261
 GameObject:
   m_ObjectHideFlags: 0
@@ -222,8 +221,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 495a9019d84d32946b4c55a37d86ae79, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _maxPoints: 5
-  _minPoints: 0.5
+  Points: 1
 --- !u!1 &8960377834254656
 GameObject:
   m_ObjectHideFlags: 0
@@ -334,8 +332,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 495a9019d84d32946b4c55a37d86ae79, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _maxPoints: 5
-  _minPoints: 0.5
+  Points: 1
 --- !u!1 &8960377836666439
 GameObject:
   m_ObjectHideFlags: 0
@@ -446,8 +443,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 495a9019d84d32946b4c55a37d86ae79, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _maxPoints: 5
-  _minPoints: 0.5
+  Points: 1
 --- !u!1 &8960377846764956
 GameObject:
   m_ObjectHideFlags: 0
@@ -558,8 +554,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 495a9019d84d32946b4c55a37d86ae79, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _maxPoints: 5
-  _minPoints: 0.5
+  Points: 1
 --- !u!1 &8960377851047888
 GameObject:
   m_ObjectHideFlags: 0
@@ -670,8 +665,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 495a9019d84d32946b4c55a37d86ae79, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _maxPoints: 5
-  _minPoints: 0.5
+  Points: 1
 --- !u!1 &8960377866323427
 GameObject:
   m_ObjectHideFlags: 0
@@ -782,8 +776,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 495a9019d84d32946b4c55a37d86ae79, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _maxPoints: 5
-  _minPoints: 0.5
+  Points: 1
 --- !u!1 &8960377942979742
 GameObject:
   m_ObjectHideFlags: 0
@@ -894,8 +887,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 495a9019d84d32946b4c55a37d86ae79, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _maxPoints: 5
-  _minPoints: 0.5
+  Points: 1
 --- !u!1 &8960378026044902
 GameObject:
   m_ObjectHideFlags: 0
@@ -1012,8 +1004,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 495a9019d84d32946b4c55a37d86ae79, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _maxPoints: 5
-  _minPoints: 0.5
+  Points: 1
 --- !u!1 &8960378064081111
 GameObject:
   m_ObjectHideFlags: 0
@@ -1124,8 +1115,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 495a9019d84d32946b4c55a37d86ae79, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _maxPoints: 5
-  _minPoints: 0.5
+  Points: 1
 --- !u!1 &8960378241021550
 GameObject:
   m_ObjectHideFlags: 0
@@ -1236,8 +1226,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 495a9019d84d32946b4c55a37d86ae79, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _maxPoints: 5
-  _minPoints: 0.5
+  Points: 1
 --- !u!1 &8960378268848397
 GameObject:
   m_ObjectHideFlags: 0
@@ -1348,8 +1337,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 495a9019d84d32946b4c55a37d86ae79, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _maxPoints: 5
-  _minPoints: 0.5
+  Points: 1
 --- !u!1 &8960378387143278
 GameObject:
   m_ObjectHideFlags: 0
@@ -1557,8 +1545,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 495a9019d84d32946b4c55a37d86ae79, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _maxPoints: 5
-  _minPoints: 0.5
+  Points: 1
 --- !u!1 &8960378697350388
 GameObject:
   m_ObjectHideFlags: 0
@@ -1669,8 +1656,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 495a9019d84d32946b4c55a37d86ae79, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _maxPoints: 5
-  _minPoints: 0.5
+  Points: 1
 --- !u!1 &8960378705403948
 GameObject:
   m_ObjectHideFlags: 0
@@ -1781,8 +1767,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 495a9019d84d32946b4c55a37d86ae79, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _maxPoints: 5
-  _minPoints: 0.5
+  Points: 1
 --- !u!1 &8960378790884959
 GameObject:
   m_ObjectHideFlags: 0
@@ -1792,6 +1777,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8960378790884956}
+  - component: {fileID: 992300278816067182}
   m_Layer: 0
   m_Name: map (2)
   m_TagString: Untagged
@@ -1849,6 +1835,20 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &992300278816067182
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8960378790884959}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 628e3acd70c592f4bb2d801b10bdf5fe, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _checkpointsPath: {fileID: 8960378387143276}
+  _startTransform: {fileID: 8960378976451407}
 --- !u!1 &8960378921007001
 GameObject:
   m_ObjectHideFlags: 0
@@ -1959,8 +1959,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 495a9019d84d32946b4c55a37d86ae79, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _maxPoints: 5
-  _minPoints: 0.5
+  Points: 1
 --- !u!1 &8960378976451406
 GameObject:
   m_ObjectHideFlags: 0
@@ -2102,8 +2101,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 495a9019d84d32946b4c55a37d86ae79, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _maxPoints: 5
-  _minPoints: 0.5
+  Points: 1
 --- !u!1 &8960379107610743
 GameObject:
   m_ObjectHideFlags: 0
@@ -2214,8 +2212,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 495a9019d84d32946b4c55a37d86ae79, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _maxPoints: 5
-  _minPoints: 0.5
+  Points: 1
 --- !u!1 &8960379136170389
 GameObject:
   m_ObjectHideFlags: 0
@@ -2326,8 +2323,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 495a9019d84d32946b4c55a37d86ae79, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _maxPoints: 5
-  _minPoints: 0.5
+  Points: 1
 --- !u!1 &8960379325099692
 GameObject:
   m_ObjectHideFlags: 0
@@ -2438,8 +2434,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 495a9019d84d32946b4c55a37d86ae79, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _maxPoints: 5
-  _minPoints: 0.5
+  Points: 1
 --- !u!1 &8960379336495907
 GameObject:
   m_ObjectHideFlags: 0
@@ -2550,8 +2545,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 495a9019d84d32946b4c55a37d86ae79, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _maxPoints: 5
-  _minPoints: 0.5
+  Points: 1
 --- !u!1 &8960379759887951
 GameObject:
   m_ObjectHideFlags: 0
@@ -2662,8 +2656,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 495a9019d84d32946b4c55a37d86ae79, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _maxPoints: 5
-  _minPoints: 0.5
+  Points: 1
 --- !u!1 &8960379773067778
 GameObject:
   m_ObjectHideFlags: 0
@@ -2774,8 +2767,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 495a9019d84d32946b4c55a37d86ae79, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _maxPoints: 5
-  _minPoints: 0.5
+  Points: 1
 --- !u!1 &8960379777429502
 GameObject:
   m_ObjectHideFlags: 0
@@ -2886,8 +2878,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 495a9019d84d32946b4c55a37d86ae79, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _maxPoints: 5
-  _minPoints: 0.5
+  Points: 1
 --- !u!1 &8960379781158170
 GameObject:
   m_ObjectHideFlags: 0
@@ -2998,8 +2989,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 495a9019d84d32946b4c55a37d86ae79, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _maxPoints: 5
-  _minPoints: 0.5
+  Points: 1
 --- !u!1 &8960379796471613
 GameObject:
   m_ObjectHideFlags: 0
@@ -3110,8 +3100,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 495a9019d84d32946b4c55a37d86ae79, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _maxPoints: 5
-  _minPoints: 0.5
+  Points: 1
 --- !u!1001 &8960377672620179
 PrefabInstance:
   m_ObjectHideFlags: 0
