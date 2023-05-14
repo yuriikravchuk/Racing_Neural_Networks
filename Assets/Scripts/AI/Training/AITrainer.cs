@@ -1,26 +1,22 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
-using System;
 
 namespace AI
 {
     public class AITrainer : MonoBehaviour
     {
         [SerializeField] private MapsHandler _mapsHandler;
-        //[SerializeField] private Transform startTransform;
         [SerializeField] private int _populationCount = 10;
         [SerializeField] private int _randomPopulationCount = 10;
-        //[SerializeField] private CheckpointsPath _checkpointsPath;
 
-        private List<Enemy> _enemies;
         private WeightsBalancer _weightsBalancer;
         private IObjectProvider<Enemy> _enemiesProvider;
-        private IReadOnlyList<int> _layersSize;
- 
+        private Map _currentMap;
+        private List<Enemy> _enemies;
         private List<TrainingResults> _results;
-        private const int _minBestCount = 2, _maxBestCount = 4;
-        private float _iteratiomCount;
+        private IReadOnlyList<int> _layersSize;
+        private const int _maxBestCount = 4;
 
         public void Init(IObjectProvider<Enemy> enemiesProvider, WeightsBalancer weightsBalancer, List<Neuron[][]> best = null)
         {
@@ -36,51 +32,49 @@ namespace AI
             _enemies.Clear();
             _results.Clear();
 
-            Map map = _mapsHandler.GetNextMap();
+            _currentMap = _mapsHandler.GetNextMap();
 
-            SpawnBest(map);
-            SpawnMainPopulation(map);
-            SpawnRandomPopulation(map);
-            _iteratiomCount++;
+            SpawnBest();
+            SpawnMainPopulation();
+            SpawnRandomPopulation();
         }
 
-        private void SpawnBest(Map map)
+        private void SpawnBest()
         {
             if (_weightsBalancer.Parents == null)
                 return;
 
             foreach (var neurons in _weightsBalancer.Parents)
-                SpawnEnemy(neurons.Neurons, map);
-
+                SpawnEnemy(neurons.Neurons);
         }
 
-        private void SpawnRandomPopulation(Map map)
+        private void SpawnRandomPopulation()
         {
             for (int i = 0; i < _randomPopulationCount; i++)
             {
                 Neuron[][] neurons = _weightsBalancer.GetRandomNeurons(_layersSize);
-                SpawnEnemy(neurons, map);
+                SpawnEnemy(neurons);
             }
         }
 
-        private void SpawnMainPopulation(Map map)
+        private void SpawnMainPopulation()
         {
             for (int i = 0; i < _populationCount; i++)
             {
                 Neuron[][] neurons = _weightsBalancer.Parents == null || _weightsBalancer.Parents.Count < 2
                     ? _weightsBalancer.GetRandomNeurons(_layersSize) 
                     : _weightsBalancer.UniformCross();
-                SpawnEnemy(neurons, map);
+                SpawnEnemy(neurons);
             }
         }
 
-        private void SpawnEnemy(Neuron[][] neurons, Map map)
+        private void SpawnEnemy(Neuron[][] neurons)
         {
             Enemy enemy = _enemiesProvider.Get();
-            enemy.Init(map.Path, _layersSize);
+            enemy.Init(_currentMap.Path, _layersSize);
             enemy.Died += OnEnemyDie;
             _enemies.Add(enemy);
-            enemy.transform.SetPositionAndRotation(map.StartPosition, map.StartRotation);
+            enemy.transform.SetPositionAndRotation(_currentMap.StartPosition, _currentMap.StartRotation);
             enemy.Ai.SetNeurons(neurons);
         }
 
@@ -90,7 +84,6 @@ namespace AI
                 enemy.Die();
 
             UpdateBestResults();
-            //Debug.Log("Count: " + _iteratiomCount.ToString());
             StartTraining();
         }
 
@@ -104,7 +97,8 @@ namespace AI
         private void OnEnemyDie(Enemy enemy)
         {
             _enemies.Remove(enemy);
-            _results.Add(new TrainingResults(enemy.Ai.CopyNeurons(), enemy.Score));
+            float fitness = enemy.Score / _currentMap.MaxPoints;
+            _results.Add(new TrainingResults(enemy.Ai.CopyNeurons(), fitness));
             enemy.Died -= OnEnemyDie;
             if (_enemies.Count == 0)
                 EndTraining();
