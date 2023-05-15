@@ -46,7 +46,7 @@ public class Enemy : Car
     {
         List<float> inputs = new();
         inputs.AddRange(GetDistancesToBorders());
-        inputs.Add(GetDistanceToCheckpoint());
+        inputs.Add(GetDistanceToCheckpoint(_checkpointIndex));
         inputs.Add(Speed);
         inputs.Add(GetCheckpointRotationDifference());
         IReadOnlyList<float> outputs = Ai.GetOutputs(inputs);
@@ -59,7 +59,9 @@ public class Enemy : Car
 
     protected override void OnDie()
     {
-        Score -= GetDistanceToCheckpoint() / 100;
+        if(_checkpointIndex > 0)
+            Score += GetDistanceToCheckpoint(_checkpointIndex-1);
+
         Died?.Invoke(this);
     }
 
@@ -68,12 +70,11 @@ public class Enemy : Car
         var result = new float[_rayPositions.Count];
         for(int i = 0; i < _rayPositions.Count; i++)
         {
-            Ray ray = new(_rayPositions[i].transform.position, _rayPositions[i].transform.forward);
+            Ray ray = new(_rayPositions[i].transform.position, _rayPositions[i].transform.forward * 100);
 
             if(Physics.Raycast(ray, out RaycastHit hit))
                 result[i] = hit.distance;
-
-            //Debug.DrawLine(_rayPositions[i].transform.position, _rayPositions[i].transform.forward * 100, Color.white, 0.01f ,true);
+            //Debug.DrawRay(_rayPositions[i].transform.position, _rayPositions[i].transform.forward * 100);
         }
         return result;
     }
@@ -81,14 +82,14 @@ public class Enemy : Car
     private float GetCheckpointRotationDifference()
     {
         var VectorToRotate = _path[_checkpointIndex].transform.position - transform.position;
-        Debug.DrawRay(transform.position, VectorToRotate);
+        Debug.DrawRay(transform.position, VectorToRotate, Color.yellow);
         //Debug.DrawLine(transform.position, _path[_checkpointIndex].transform.position);
         return Vector3.Angle(transform.position, VectorToRotate);
     }
 
-    private float GetDistanceToCheckpoint()
+    private float GetDistanceToCheckpoint(int index)
     {
-        var checkpointPosition = _path[_checkpointIndex].transform.position;
+        var checkpointPosition = _path[index].transform.position;
         checkpointPosition.y = 0;
         return Vector3.Distance(checkpointPosition, transform.position);
     }

@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
+using System;
 
 namespace AI
 {
@@ -16,7 +17,7 @@ namespace AI
         private List<Enemy> _enemies;
         private List<TrainingResults> _results;
         private IReadOnlyList<int> _layersSize;
-        private const int _maxBestCount = 4;
+        private const int _maxBestCount = 2;
 
         public void Init(IObjectProvider<Enemy> enemiesProvider, WeightsBalancer weightsBalancer, List<Neuron[][]> best = null)
         {
@@ -91,7 +92,7 @@ namespace AI
         {
             _results = _results.OrderByDescending(element => element.Score).ToList();
             _weightsBalancer.AddParents(_results.Take(_maxBestCount).ToList());
-            Debug.Log(_results[0].Score.ToString() + " " + _results[1].Score.ToString());
+            Debug.Log(Math.Round(_results[0].Score, 4).ToString() + " " + Math.Round(_results[1].Score, 4).ToString());
         }
 
         private void OnEnemyDie(Enemy enemy)

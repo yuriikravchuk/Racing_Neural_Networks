@@ -3,10 +3,24 @@ using UnityEngine;
 
 public class Map : MonoBehaviour
 {
-    [SerializeField] private CheckpointsPath _checkpointsPath;
     [SerializeField] private Transform _startTransform;
-    public IReadOnlyList<Checkpoint> Path => _checkpointsPath.Path;
+    public IReadOnlyList<Checkpoint> Path => _path;
     public Vector3 StartPosition => _startTransform.position;
     public Quaternion StartRotation => _startTransform.rotation;    
-    public float MaxPoints => _checkpointsPath.MaxPoints;
+    public float MaxPoints { get; private set; }
+
+    private Checkpoint[] _path;
+
+    private void Awake()
+    {
+        _path = GetComponentsInChildren<Checkpoint>();
+
+        MaxPoints += _path[0].Points;
+        for (int i = 1; i < _path.Length; i++)
+        {
+            float points = Vector3.Distance(_path[i].transform.position, _path[i - 1].transform.position);
+            _path[i].Points = points;
+            MaxPoints += points;
+        }
+    }
 }

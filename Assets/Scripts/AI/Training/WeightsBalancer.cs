@@ -7,8 +7,7 @@ namespace AI
     public class WeightsBalancer
     {
         public List<TrainingResults> Parents;
-        private const float _minWeight = -1f, _maxWeight = 1f, _mutationRate = 0.0002f, _minBias = -1, _maxBias = 1;
-        private const int _maxParentsCount = 4;
+        private const float _minWeight = -1f, _maxWeight = 1f, _mutationRate = 0.00014f, _minBias = -1, _maxBias = 1;
         private readonly Random _random;
 
         public WeightsBalancer()
@@ -20,7 +19,8 @@ namespace AI
         public void AddParents(IReadOnlyList<TrainingResults> parents)
         {
             Parents.AddRange(parents);
-            Parents = Parents.OrderByDescending(element => element.Score).Take(_maxParentsCount).ToList();
+            Parents = Parents.Skip(parents.Count).ToList();
+            //Parents = Parents.OrderByDescending(element => element.Score).Take(_maxParentsCount).ToList();
         }
 
         public Neuron[][] UniformCross()
