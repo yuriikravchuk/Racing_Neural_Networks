@@ -19,7 +19,7 @@ namespace AI
         private IReadOnlyList<int> _layersSize;
         private const int _maxBestCount = 2;
 
-        public void Init(IObjectProvider<Enemy> enemiesProvider, WeightsBalancer weightsBalancer, List<Neuron[][]> best = null)
+        public void Init(IObjectProvider<Enemy> enemiesProvider, WeightsBalancer weightsBalancer)
         {
             _weightsBalancer = weightsBalancer;
             _enemiesProvider = enemiesProvider;

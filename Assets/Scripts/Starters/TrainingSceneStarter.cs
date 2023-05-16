@@ -14,7 +14,7 @@ public class TrainingSceneStarter : MonoBehaviour
     
     private void Awake()
     {
-        var saveProvider = new BinarySaveProvider<List<TrainingResults>>();
+        var saveProvider = new BinarySaveProvider<IReadOnlyList<TrainingResults>>();
         WeightsBalancer weightsBalancer = new WeightsBalancer();
         _saveBinder = new SaveBinder(saveProvider, weightsBalancer);
         _saveBinder.Load();

@@ -6,21 +6,30 @@ namespace AI
 {
     public class WeightsBalancer
     {
-        public List<TrainingResults> Parents;
-        private const float _minWeight = -1f, _maxWeight = 1f, _mutationRate = 0.00014f, _minBias = -1, _maxBias = 1;
+        public IReadOnlyList<TrainingResults> Parents => _parents;
+        private List<TrainingResults> _parents;
+        private const float _minWeight = -1f, _maxWeight = 1f, _mutationRate = 0.0002f, _minBias = -1, _maxBias = 1, _maxFitnessDifference = 0.03f;
+        private const int _maxParentsCount = 32;
         private readonly Random _random;
 
         public WeightsBalancer()
         {
             _random = new Random();
-            Parents = new List<TrainingResults>();
+            _parents = new List<TrainingResults>();
         }
 
         public void AddParents(IReadOnlyList<TrainingResults> parents)
         {
-            Parents.AddRange(parents);
-            Parents = Parents.Skip(parents.Count).ToList();
-            //Parents = Parents.OrderByDescending(element => element.Score).Take(_maxParentsCount).ToList();
+            float minFitness = _parents.Count > 0 ? _parents.Min(element => element.Score) : 0;
+            float lowerFitnessLimit = minFitness * (1 - _maxFitnessDifference);
+
+            foreach (var parent in parents)
+            {
+                _parents.Add(parent);
+
+                if (_parents.Count > _maxParentsCount)
+                    _parents.RemoveAt(0);
+            }
         }
 
         public Neuron[][] UniformCross()

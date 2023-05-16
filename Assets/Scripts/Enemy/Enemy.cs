@@ -74,7 +74,7 @@ public class Enemy : Car
 
             if(Physics.Raycast(ray, out RaycastHit hit))
                 result[i] = hit.distance;
-            //Debug.DrawRay(_rayPositions[i].transform.position, _rayPositions[i].transform.forward * 100);
+            //Debug.DrawRay(_rayPositions[i].transform.position, _rayPositions[i].transform.forward * 40);
         }
         return result;
     }
@@ -83,7 +83,6 @@ public class Enemy : Car
     {
         var VectorToRotate = _path[_checkpointIndex].transform.position - transform.position;
         Debug.DrawRay(transform.position, VectorToRotate, Color.yellow);
-        //Debug.DrawLine(transform.position, _path[_checkpointIndex].transform.position);
         return Vector3.Angle(transform.position, VectorToRotate);
     }
 
