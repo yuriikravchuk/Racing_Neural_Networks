@@ -1,8 +1,8 @@
 ﻿using AI;
 using System;
 using System.Collections.Generic;
-using TMPro;
 using UnityEngine;
+
 public class Enemy : Car
 {
     [SerializeField] private List<Transform> _rayPositions;
@@ -27,8 +27,11 @@ public class Enemy : Car
         Score = 0;
     }
 
-    public void AddPoints(float value)
+    public void CheckpointCollected(int index, float value)
     {
+        if (index != _checkpointIndex)
+            return;
+
         if(value < 0)
             throw new ArgumentOutOfRangeException();
 
@@ -37,7 +40,6 @@ public class Enemy : Car
         _checkpointIndex++;
         if(_checkpointIndex >= _path.Count)
         {
-            Score += 20;
             Die();
         }
     }
@@ -53,13 +55,11 @@ public class Enemy : Car
         vertical = outputs[0];
         horizontal = outputs[1];
         breaking = 0;
-        //Debug.Log("in: " + inputs[0].ToString() + " " + inputs[1].ToString() + " " + inputs[2].ToString() + inputs[3].ToString() + " " + inputs[4].ToString() + " " + inputs[5].ToString() + " " + inputs[6].ToString() + " " + inputs[7].ToString() + " " + "\n out: v:" + vertical.ToString() + " h: " + horizontal.ToString() + " b: " + breaking.ToString());
-        //Debug.Log("v:" + vertical.ToString() + " h: " + horizontal.ToString());
     }
 
     protected override void OnDie()
     {
-        if(_checkpointIndex > 0)
+        if(_checkpointIndex > 0 && _checkpointIndex < _path.Count - 1)
             Score += GetDistanceToCheckpoint(_checkpointIndex-1);
 
         Died?.Invoke(this);
@@ -81,15 +81,29 @@ public class Enemy : Car
 
     private float GetCheckpointRotationDifference()
     {
-        var VectorToRotate = _path[_checkpointIndex].transform.position - transform.position;
+        var VectorToRotate = GetNormalVector(_checkpointIndex);
         Debug.DrawRay(transform.position, VectorToRotate, Color.yellow);
-        return Vector3.Angle(transform.position, VectorToRotate);
+        return Vector3.Angle(transform.forward, VectorToRotate);
     }
 
     private float GetDistanceToCheckpoint(int index)
     {
         var checkpointPosition = _path[index].transform.position;
         checkpointPosition.y = 0;
-        return Vector3.Distance(checkpointPosition, transform.position);
+        Vector3 VectorToRotate = GetNormalVector(index);
+        return VectorToRotate.magnitude;
+    }
+
+    private Vector3 GetNormalVector(int index)
+    {
+        Transform checkpoint = _path[index].transform;
+        Vector3 checkpointPosition = checkpoint.transform.position;
+        checkpointPosition.y = 0;
+        var vectorToCenter = checkpointPosition - transform.position;
+        float angle = Vector3.SignedAngle(vectorToCenter, checkpoint.forward, Vector3.up);
+        float a = vectorToCenter.magnitude * Mathf.Sin(angle * Mathf.Deg2Rad);
+        Vector3 normalPoint = checkpointPosition + checkpoint.right * a;
+        Vector3 normalVector = normalPoint - transform.position;
+        return normalVector;
     }
 }

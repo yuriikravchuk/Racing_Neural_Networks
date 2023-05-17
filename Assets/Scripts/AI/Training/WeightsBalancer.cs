@@ -8,7 +8,7 @@ namespace AI
     {
         public IReadOnlyList<TrainingResults> Parents => _parents;
         private List<TrainingResults> _parents;
-        private const float _minWeight = -1f, _maxWeight = 1f, _mutationRate = 0.0002f, _minBias = -1, _maxBias = 1, _maxFitnessDifference = 0.03f;
+        private const float _minWeight = -1f, _maxWeight = 1f, _mutationRate = 0.0000005f, _minBias = -1, _maxBias = 1, _maxFitnessDifference = 0.03f;
         private const int _maxParentsCount = 32;
         private readonly Random _random;
 

@@ -25,7 +25,7 @@ namespace AI
             _enemiesProvider = enemiesProvider;
             _enemies = new List<Enemy>();
             _results = new List<TrainingResults>();
-            _layersSize = new List<int>() { 8, 10, 10, 10, 10, 2 };
+            _layersSize = new List<int>() { 8, 6, 4, 2 };
         }
 
         public void StartTraining()
