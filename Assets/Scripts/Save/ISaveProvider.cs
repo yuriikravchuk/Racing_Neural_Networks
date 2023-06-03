@@ -1,5 +1,5 @@
-﻿public interface ISaveProvider<T>
+﻿public interface ISaveProvider
 {
-    public T TryGetSave(string fileName);
-    public void UpdateSave(T save, string fileName);
+    public T TryGetSave<T>(string fileName);
+    public void UpdateSave<T>(T save, string fileName);
 }

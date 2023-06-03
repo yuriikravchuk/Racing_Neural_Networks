@@ -21,8 +21,8 @@ TagManager:
   - Metal
   - Rubber
   - FinishZone
-  - 
-  - 
+  - Ignore global light
+  - Post processing
   - 
   - 
   - 

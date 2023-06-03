@@ -4,37 +4,64 @@ using System.Linq;
 
 namespace AI
 {
-    public class WeightsBalancer
+    public class WeightsBalancer : IEnemiesHandler
     {
-        public IReadOnlyList<TrainingResults> Parents => _parents;
-        private List<TrainingResults> _parents;
-        private const float _minWeight = -1f, _maxWeight = 1f, _mutationRate = 0.0000005f, _minBias = -1, _maxBias = 1, _maxFitnessDifference = 0.03f;
-        private const int _maxParentsCount = 32;
-        private readonly Random _random;
+        public IReadOnlyList<TrainingResults> Results => _results;
+        public event Action<IReadOnlyList<float>> ScoresChanged;
+
+        private readonly List<TrainingResults> _results;
+        private const float _minWeight = -1f, _maxWeight = 1f, _minBias = -1, _maxBias = 1, _mutationRate = 0.04f;
+        private const int _maxBestParentsCount = 6;
+        private const int _maxRegularParentsCount = 0;
+        private readonly System.Random _random;
 
         public WeightsBalancer()
         {
-            _random = new Random();
-            _parents = new List<TrainingResults>();
+            _random = new System.Random();
+            _results = new List<TrainingResults>();
         }
 
-        public void AddParents(IReadOnlyList<TrainingResults> parents)
+        public void SetResults(IEnumerable<TrainingResults> results)
         {
-            float minFitness = _parents.Count > 0 ? _parents.Min(element => element.Score) : 0;
-            float lowerFitnessLimit = minFitness * (1 - _maxFitnessDifference);
+            if (results == null || results.Count() == 0) { return; }
 
-            foreach (var parent in parents)
+            List<TrainingResults> bestParents = _results.Take(_maxBestParentsCount).ToList();
+            List<TrainingResults> regularParents = _results.Skip(_maxBestParentsCount).ToList();
+
+            regularParents.AddRange(results);
+            regularParents = regularParents.GroupBy(item => item.Fitness).Select(d => d.First()).ToList();
+            if (regularParents.Count > _maxRegularParentsCount)
+                regularParents = regularParents.Skip(regularParents.Count - _maxRegularParentsCount).ToList();
+
+            float minFitness = _results.Count > 0 ? _results.Take(_maxBestParentsCount).Min(item => item.Fitness) : 0;
+
+            foreach (var newParent in results)
             {
-                _parents.Add(parent);
+                if (newParent.Fitness < minFitness)
+                    continue;
 
-                if (_parents.Count > _maxParentsCount)
-                    _parents.RemoveAt(0);
+                int parentIndex = bestParents.FindIndex(item => IsEqual(item.Neurons, newParent.Neurons));
+
+                if (parentIndex == -1)
+                    bestParents.Add(newParent);
+                else if (bestParents[parentIndex].Fitness < newParent.Fitness)
+                    bestParents[parentIndex] = newParent;
             }
+
+            bestParents = bestParents.OrderByDescending(item => item.Fitness).Take(_maxBestParentsCount).ToList();
+
+
+            _results.Clear();
+            _results.AddRange(bestParents);
+            _results.AddRange(regularParents);
+
+            if (Results.Count > 0)
+                ScoresChanged?.Invoke(Results.Select(item => item.Fitness).ToList());
         }
 
-        public Neuron[][] UniformCross()
+        public Neuron[][] UniformCross(float mutationMultiplyier)
         {
-            var firstParrent = Parents[0].Neurons;
+            var firstParrent = Results[0].Neurons;
             int layersCount = firstParrent.Length;
             var result = new Neuron[layersCount][];
 
@@ -54,18 +81,18 @@ namespace AI
                     float[] weights = new float[weightsCount];
                     for (int y = 0; y < weightsCount; y++)
                     {
-                        float[] weightsFromParents = Parents.Select(item => item.Neurons[layerIndex][x].Weights[y]).ToArray();
+                        float[] weightsFromParents = Results.Select(item => item.Neurons[layerIndex][x].Weights[y]).ToArray();
                         float weight = GetRandomValue(weightsFromParents);
-                        TryMutate(ref weight);
+                        TryMutate(ref weight, mutationMultiplyier);
                         weights[y] = weight;
 
                     }
-                    float[] parentBiases = Parents.Select(item => item.Neurons[layerIndex][x].Bias).ToArray();
+                    float[] parentBiases = Results.Select(item => item.Neurons[layerIndex][x].Bias).ToArray();
                     float bias = GetRandomValue(parentBiases);
-                    TryMutate(ref bias);
+                    TryMutate(ref bias, mutationMultiplyier);
                     result[layerIndex][x] = new Neuron(weights, bias);
                 }
-            } 
+            }
             return result;
         }
 
@@ -75,7 +102,7 @@ namespace AI
             var result = new Neuron[layersCount][];
             result[0] = new Neuron[layersSize[0]];
 
-            for(int i = 0; i < layersSize[0]; i++)
+            for (int i = 0; i < layersSize[0]; i++)
                 result[0][i] = new Neuron();
 
             for (int layerIndex = 1; layerIndex < layersCount; layerIndex++)
@@ -104,15 +131,37 @@ namespace AI
             return values[index];
         }
 
-        private void TryMutate(ref float value)
+        private void TryMutate(ref float value, float mutationMultiplyier)
         {
             float random = GetRandomInRange(0f, 1f);
-            if (random <= _mutationRate)
+            if (random <= _mutationRate * mutationMultiplyier)
                 value = GetRandomInRange(_minWeight, _maxWeight);
         }
 
         //private float GetRandomInRange(float first, float second) => Random.Range(first, second);
 
         private float GetRandomInRange(float min, float max) => (float)(_random.NextDouble() * (max - min) + min);
+
+        private bool IsEqual(Neuron[][] one, Neuron[][] other)
+        {
+            int layersCount = one.Length;
+            for (int layerIndex = 0; layerIndex < layersCount; layerIndex++)
+            {
+                int neuronsCount = one[layerIndex].Length;
+
+                for (int neuronIndex = 0; neuronIndex < neuronsCount; neuronIndex++)
+                {
+                    int weightsCount = one[layerIndex][neuronIndex].Weights.Count;
+
+                    for (int weightIndex = 0; weightIndex < weightsCount; weightIndex++)
+                    {
+                        if (one[layerIndex][neuronIndex].Weights[weightIndex] != other[layerIndex][neuronIndex].Weights[weightIndex])
+                            return false;
+                    }
+                }
+            }
+
+            return true;
+        }
     }
 }

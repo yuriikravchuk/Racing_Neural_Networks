@@ -1,9 +1,9 @@
 ﻿using UnityEngine;
 using System.IO;
 
-public class JsonSaveProvider<T> : ISaveProvider<T>
+public class JsonSaveProvider : ISaveProvider
 {
-    public T TryGetSave(string fileName)
+    public T TryGetSave<T>(string fileName)
     {
         string filePath = GetFullFilePath(fileName);
 
@@ -17,7 +17,7 @@ public class JsonSaveProvider<T> : ISaveProvider<T>
         return save;
     }
 
-    public void UpdateSave(T save, string fileName)
+    public void UpdateSave<T>(T save, string fileName)
     {
         using StreamWriter writer = new(GetFullFilePath(fileName));
         string json = JsonUtility.ToJson(save);

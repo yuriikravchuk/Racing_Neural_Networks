@@ -4,26 +4,25 @@ using System.Linq;
 
 public class SaveBinder
 {
-    private readonly ISaveProvider<IReadOnlyList<TrainingResults>> _provider;
-    private readonly WeightsBalancer _handler;
-    private const string _fileName = "save";
+    private readonly ISaveProvider _provider;
+    private const string _fileName = "save1";
 
-    public SaveBinder(ISaveProvider<IReadOnlyList<TrainingResults>> provider, WeightsBalancer handler)
+    public SaveBinder() => _provider = new BinarySaveProvider();
+
+    public IReadOnlyList<TrainingResults> Load()
     {
-        _provider = provider;
-        _handler = handler;
+        IReadOnlyList<TrainingResults> save = _provider.TryGetSave<IReadOnlyList<TrainingResults>>(_fileName);
+        //List<TrainingResults> results = new List<TrainingResults>();
+        //foreach(TrainingResults result in save) {
+        //    results.Add(new TrainingResults(result.Neurons, 0)) ;
+        //}
+
+        return save;
     }
 
-
-    public void Load()
+    public void Save(IReadOnlyList<TrainingResults> save)
     {
-        IReadOnlyList<TrainingResults> save = _provider.TryGetSave(_fileName);
-        _handler.AddParents(save);
-    }
 
-    public void Save()
-    {
-        IReadOnlyList<TrainingResults> save = _handler.Parents;
         _provider.UpdateSave(save, _fileName);
     }
 }

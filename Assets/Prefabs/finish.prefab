@@ -42,7 +42,7 @@ GameObject:
   - component: {fileID: 8268531124632284028}
   - component: {fileID: 8268531124632284030}
   - component: {fileID: 8268531124632284029}
-  m_Layer: 0
+  m_Layer: 14
   m_Name: arch
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -183,8 +183,8 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 3aadd5fe4fea0d64d9bbe219fd79b6f3, type: 2}
-  - {fileID: 2100000, guid: 91744a4bc7078c64bb40ae79bf3bd6d0, type: 2}
+  - {fileID: 2100000, guid: 0c09dfd606957c742b0622f1fb49c9c9, type: 2}
+  - {fileID: 2100000, guid: 5fece30d236f4584684ce962d0de3301, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0

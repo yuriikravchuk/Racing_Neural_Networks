@@ -5,15 +5,15 @@ public class MapsHandler : MonoBehaviour
 {
     [SerializeField] private List<Map> _maps;
 
+    public Map CurrentMap => _maps[_currentIndex];
+
     private int _currentIndex = 0;
 
-    public Map GetNextMap()
+    public void SwitchMap()
     {
-        int lastIndex = _maps.Count - 1;
-        int nextIndex = _currentIndex == lastIndex ? 0 : _currentIndex + 1;
+        int nextIndex = _currentIndex == _maps.Count - 1 ? 0 : _currentIndex + 1;
         _maps[_currentIndex].gameObject.SetActive(false);
         _maps[nextIndex].gameObject.SetActive(true);
         _currentIndex = nextIndex;
-        return _maps[_currentIndex];
     }
 }

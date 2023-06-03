@@ -1,14 +1,14 @@
 ﻿using UnityEngine;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.IO;
-public class BinarySaveProvider<T> : ISaveProvider<T>
+public class BinarySaveProvider : ISaveProvider
 {
     private readonly BinaryFormatter _binaryFormater;
 
     public BinarySaveProvider()
         => _binaryFormater = new BinaryFormatter();
 
-    public T TryGetSave(string fileName)
+    public T TryGetSave<T>(string fileName)
     {
         string path = GetFullFilePath(fileName);
         if (!File.Exists(path))
@@ -21,7 +21,7 @@ public class BinarySaveProvider<T> : ISaveProvider<T>
         return save;
     }
 
-    public void UpdateSave(T save, string name)
+    public void UpdateSave<T>(T save, string name)
     {
         string path = GetFullFilePath(name);
         var fileStream = new FileStream(path, FileMode.Create);

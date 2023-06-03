@@ -9,15 +9,15 @@ public class Enemy : Car
 
     public NeuralNetwork Ai { get; private set; }
     public float Score { get; private set; }
-    public event Action<Enemy> Died;
+    public float SpawnTime;
     public event Action ScoreChanged;
 
     private IReadOnlyList<Checkpoint> _path;
     private int _checkpointIndex;
-    
-    public void Init(IReadOnlyList<Checkpoint> path, IReadOnlyList<int> LayersSize)
+
+    public void Init(IReadOnlyList<Checkpoint> path, Neuron[][] neurons)
     {
-        Ai = new NeuralNetwork(LayersSize);
+        Ai = new NeuralNetwork(neurons);
         _path = path;
     }
 
@@ -25,6 +25,7 @@ public class Enemy : Car
     {
         _checkpointIndex = 0;
         Score = 0;
+        SpawnTime = Time.time;
     }
 
     public void CheckpointCollected(int index, float value)
@@ -32,16 +33,14 @@ public class Enemy : Car
         if (index != _checkpointIndex)
             return;
 
-        if(value < 0)
+        if (value < 0)
             throw new ArgumentOutOfRangeException();
 
         Score += value;
         ScoreChanged?.Invoke();
         _checkpointIndex++;
-        if(_checkpointIndex >= _path.Count)
-        {
+        if (_checkpointIndex >= _path.Count)
             Die();
-        }
     }
 
     protected override void GetMovementInputs(out float vertical, out float horizontal, out float breaking)
@@ -59,22 +58,22 @@ public class Enemy : Car
 
     protected override void OnDie()
     {
-        if(_checkpointIndex > 0 && _checkpointIndex < _path.Count - 1)
-            Score += GetDistanceToCheckpoint(_checkpointIndex-1);
-
-        Died?.Invoke(this);
+        if (_checkpointIndex > 0 && _checkpointIndex < _path.Count - 1)
+            Score += GetDistanceToCheckpoint(_checkpointIndex - 1);
+        
+        gameObject.SetActive(false);
     }
 
     private float[] GetDistancesToBorders()
     {
         var result = new float[_rayPositions.Count];
-        for(int i = 0; i < _rayPositions.Count; i++)
+        for (int i = 0; i < _rayPositions.Count; i++)
         {
             Ray ray = new(_rayPositions[i].transform.position, _rayPositions[i].transform.forward * 100);
 
-            if(Physics.Raycast(ray, out RaycastHit hit))
+            if (Physics.Raycast(ray, out RaycastHit hit))
                 result[i] = hit.distance;
-            //Debug.DrawRay(_rayPositions[i].transform.position, _rayPositions[i].transform.forward * 40);
+            Debug.DrawRay(_rayPositions[i].transform.position, _rayPositions[i].transform.forward * 40);
         }
         return result;
     }
@@ -106,4 +105,8 @@ public class Enemy : Car
         Vector3 normalVector = normalPoint - transform.position;
         return normalVector;
     }
+
+    public void SetDefaultColor() => View.SetColor(Color.green);
+
+    public void SetParentColor() => View.SetColor(Color.blue);
 }

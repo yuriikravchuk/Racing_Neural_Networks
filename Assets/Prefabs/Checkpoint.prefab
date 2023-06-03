@@ -13,12 +13,12 @@ GameObject:
   - component: {fileID: 5051071236900487766}
   - component: {fileID: 6346370762925862966}
   - component: {fileID: 6891092226264322334}
-  m_Layer: 0
+  m_Layer: 14
   m_Name: Checkpoint
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!4 &3315212030304486999
 Transform:
@@ -110,4 +110,3 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 495a9019d84d32946b4c55a37d86ae79, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Points: 0

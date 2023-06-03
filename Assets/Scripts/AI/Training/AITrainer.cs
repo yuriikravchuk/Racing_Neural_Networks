@@ -7,17 +7,20 @@ namespace AI
 {
     public class AITrainer : MonoBehaviour
     {
-        [SerializeField] private MapsHandler _mapsHandler;
+        //[SerializeField] private MapsHandler _mapsHandler;
         [SerializeField] private int _populationCount = 10;
-        [SerializeField] private int _randomPopulationCount = 10;
+        [SerializeField] private Map _currentMap;
+
+        public event Action<int> AliveCarsCountChanged;
 
         private WeightsBalancer _weightsBalancer;
         private IObjectProvider<Enemy> _enemiesProvider;
-        private Map _currentMap;
+
         private List<Enemy> _enemies;
         private List<TrainingResults> _results;
         private IReadOnlyList<int> _layersSize;
         private const int _maxBestCount = 2;
+        private float _maxFitness = 0;
 
         public void Init(IObjectProvider<Enemy> enemiesProvider, WeightsBalancer weightsBalancer)
         {
@@ -25,7 +28,8 @@ namespace AI
             _enemiesProvider = enemiesProvider;
             _enemies = new List<Enemy>();
             _results = new List<TrainingResults>();
-            _layersSize = new List<int>() { 8, 6, 4, 2 };
+            _layersSize = new List<int>() { 10, 4, 2 };
+            _maxFitness = weightsBalancer.Results.Count > 0 ? weightsBalancer.Results.Max(item => item.Fitness) : 0;
         }
 
         public void StartTraining()
@@ -33,50 +37,48 @@ namespace AI
             _enemies.Clear();
             _results.Clear();
 
-            _currentMap = _mapsHandler.GetNextMap();
+            //_currentMap = _mapsHandler.GetNextMap();
 
             SpawnBest();
             SpawnMainPopulation();
-            SpawnRandomPopulation();
+            AliveCarsCountChanged.Invoke(_enemies.Count);
         }
 
         private void SpawnBest()
         {
-            if (_weightsBalancer.Parents == null)
+            if (_weightsBalancer.Results == null)
                 return;
 
-            foreach (var neurons in _weightsBalancer.Parents)
-                SpawnEnemy(neurons.Neurons);
-        }
-
-        private void SpawnRandomPopulation()
-        {
-            for (int i = 0; i < _randomPopulationCount; i++)
+            foreach (var parent in _weightsBalancer.Results)
             {
-                Neuron[][] neurons = _weightsBalancer.GetRandomNeurons(_layersSize);
-                SpawnEnemy(neurons);
+                Enemy enemy = GetEnemy(parent.Neurons);
+                enemy.SetParentColor();
             }
+
         }
 
         private void SpawnMainPopulation()
         {
             for (int i = 0; i < _populationCount; i++)
             {
-                Neuron[][] neurons = _weightsBalancer.Parents == null || _weightsBalancer.Parents.Count < 2
-                    ? _weightsBalancer.GetRandomNeurons(_layersSize) 
-                    : _weightsBalancer.UniformCross();
-                SpawnEnemy(neurons);
+                Neuron[][] neurons = _weightsBalancer.Results == null || _weightsBalancer.Results.Count < 2
+                    ? _weightsBalancer.GetRandomNeurons(_layersSize)
+                    : _weightsBalancer.UniformCross(1f);
+                //: _weightsBalancer.UniformCross(1f - (float)Math.Pow(_maxFitness, 1f/4f));
+                Enemy enemy = GetEnemy(neurons);
+                enemy.SetDefaultColor();
             }
         }
 
-        private void SpawnEnemy(Neuron[][] neurons)
+        private Enemy GetEnemy(Neuron[][] neurons)
         {
             Enemy enemy = _enemiesProvider.Get();
-            enemy.Init(_currentMap.Path, _layersSize);
-            enemy.Died += OnEnemyDie;
+            enemy.Init(_currentMap.Path, neurons);
+            enemy.Died += () => OnEnemyDie(enemy);
             _enemies.Add(enemy);
             enemy.transform.SetPositionAndRotation(_currentMap.StartPosition, _currentMap.StartRotation);
             enemy.Ai.SetNeurons(neurons);
+            return enemy;
         }
 
         public void EndTraining()
@@ -84,25 +86,24 @@ namespace AI
             foreach (var enemy in _enemies)
                 enemy.Die();
 
-            UpdateBestResults();
+            _results = _results.OrderByDescending(element => element.Fitness).ToList();
+            _weightsBalancer.SetResults(_results.Take(_maxBestCount));
+            _maxFitness = _weightsBalancer.Results.Max(item => item.Fitness);
+            Debug.Log(_results[0].Fitness);
             StartTraining();
-        }
-
-        private void UpdateBestResults()
-        {
-            _results = _results.OrderByDescending(element => element.Score).ToList();
-            _weightsBalancer.AddParents(_results.Take(_maxBestCount).ToList());
-            Debug.Log(Math.Round(_results[0].Score, 4).ToString() + " " + Math.Round(_results[1].Score, 4).ToString());
         }
 
         private void OnEnemyDie(Enemy enemy)
         {
             _enemies.Remove(enemy);
             float fitness = enemy.Score / _currentMap.MaxPoints;
+            //_results.Add(new TestResults(enemy.Ai.CopyNeurons(), fitness, Time.time - enemy.SpawnTime));
             _results.Add(new TrainingResults(enemy.Ai.CopyNeurons(), fitness));
-            enemy.Died -= OnEnemyDie;
+            enemy.Died -= () => OnEnemyDie(enemy);
             if (_enemies.Count == 0)
                 EndTraining();
+
+            AliveCarsCountChanged?.Invoke(_enemies.Count);
         }
     }
 }

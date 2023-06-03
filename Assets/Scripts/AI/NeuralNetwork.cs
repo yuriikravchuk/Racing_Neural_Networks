@@ -15,9 +15,23 @@ namespace AI
             _layers[0] = new InputLayer(layersSize[0]);
 
             for (int i = 1; i < layersCount - 1; i++)
-                _layers[i] = new Layer(layersSize[i], layersSize[i-1]);
+                _layers[i] = new Layer(layersSize[i], layersSize[i - 1]);
 
             _layers[layersCount - 1] = new OutputLayer(layersSize[^1], layersSize[^2]);
+        }
+
+        public NeuralNetwork(Neuron[][] neurons)
+        {
+            var layersCount = neurons.Length;
+            _layers = new Layer[layersCount];
+            _layers[0] = new InputLayer(neurons[0].Length);
+
+            for (int i = 1; i < layersCount - 1; i++)
+                _layers[i] = new Layer(neurons[i].Length, neurons[i - 1].Length);
+
+            _layers[layersCount - 1] = new OutputLayer(neurons[^1].Length, neurons[^2].Length);
+
+            SetNeurons(neurons);
         }
 
         public IReadOnlyList<float> GetOutputs(IReadOnlyList<float> inputs)
@@ -28,7 +42,7 @@ namespace AI
             _layers[0].Update(inputs);
 
             for (int i = 1; i < _layers.Length; i++)
-                _layers[i].Update(_layers[i-1].Values);
+                _layers[i].Update(_layers[i - 1].Values);
 
             return _layers.Last().Values;
         }

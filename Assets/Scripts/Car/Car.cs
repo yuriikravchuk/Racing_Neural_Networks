@@ -1,11 +1,14 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 
 public abstract class Car : MonoBehaviour, IDieable
 {
+    [SerializeField] protected CarView View;
     [SerializeField] private CarMovement _movement;
     [SerializeField] private Rigidbody _rigidbody;
     
     public float Speed => _rigidbody.velocity.magnitude;
+    public event Action Died;
 
     private float _vertical, _horizontal, _breaking;
     private void FixedUpdate()
@@ -18,9 +21,14 @@ public abstract class Car : MonoBehaviour, IDieable
 
     public void Die()
     {
+        _rigidbody.velocity = Vector3.zero;
+        GetComponent<Rigidbody>().angularVelocity = Vector3.zero;
+
         OnDie();
-        gameObject.SetActive(false);
+        Died?.Invoke();
     }
+
+    
 
     protected abstract void GetMovementInputs(out float vertical, out float horizontal, out float breaking);
 
