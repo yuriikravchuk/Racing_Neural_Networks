@@ -23,7 +23,6 @@ public class PlayUI : MonoBehaviour
         remove => _countdown.Counted -= value;
     }
 
-
     public void SetPlayerSpeed(int value) => _playerSpeed.text = $"Speed: {value * 2}";
 
     public void ShowPlaySpeed() => _playerSpeed.gameObject.SetActive(true);

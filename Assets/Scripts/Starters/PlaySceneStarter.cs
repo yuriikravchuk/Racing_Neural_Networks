@@ -7,7 +7,6 @@ public class PlaySceneStarter : MonoBehaviour
     [SerializeField] private EnemySpawner _enemySpawner;
     [SerializeField] private GameStateMachine _gameStateMachine;
 
-
     private void Awake()
     {
         var save = new SaveBinder().Load();
@@ -16,6 +15,5 @@ public class PlaySceneStarter : MonoBehaviour
         _ui.PlayButtonClicked += () => _gameStateMachine.TrySwitchState<CountingState>();
         _ui.ÑountdownCompleted += () => _gameStateMachine.TrySwitchState<PlayState>();
         _player.Died += () => _gameStateMachine.TrySwitchState<MenuState>();
-
     }
 }

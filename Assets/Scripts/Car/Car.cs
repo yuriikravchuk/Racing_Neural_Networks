@@ -11,6 +11,7 @@ public abstract class Car : MonoBehaviour, IDieable
     public event Action Died;
 
     private float _vertical, _horizontal, _breaking;
+
     private void FixedUpdate()
     {
         GetMovementInputs(out _vertical, out _horizontal, out _breaking);

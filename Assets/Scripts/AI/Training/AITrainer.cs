@@ -7,7 +7,6 @@ namespace AI
 {
     public class AITrainer : MonoBehaviour
     {
-        //[SerializeField] private MapsHandler _mapsHandler;
         [SerializeField] private int _populationCount = 10;
         [SerializeField] private Map _currentMap;
 
@@ -15,12 +14,10 @@ namespace AI
 
         private WeightsBalancer _weightsBalancer;
         private IObjectProvider<Enemy> _enemiesProvider;
-
         private List<Enemy> _enemies;
         private List<TrainingResults> _results;
         private IReadOnlyList<int> _layersSize;
         private const int _maxBestCount = 2;
-        private float _maxFitness = 0;
 
         public void Init(IObjectProvider<Enemy> enemiesProvider, WeightsBalancer weightsBalancer)
         {
@@ -29,16 +26,12 @@ namespace AI
             _enemies = new List<Enemy>();
             _results = new List<TrainingResults>();
             _layersSize = new List<int>() { 10, 4, 2 };
-            _maxFitness = weightsBalancer.Results.Count > 0 ? weightsBalancer.Results.Max(item => item.Fitness) : 0;
         }
 
         public void StartTraining()
         {
             _enemies.Clear();
             _results.Clear();
-
-            //_currentMap = _mapsHandler.GetNextMap();
-
             SpawnBest();
             SpawnMainPopulation();
             AliveCarsCountChanged.Invoke(_enemies.Count);
@@ -64,7 +57,6 @@ namespace AI
                 Neuron[][] neurons = _weightsBalancer.Results == null || _weightsBalancer.Results.Count < 2
                     ? _weightsBalancer.GetRandomNeurons(_layersSize)
                     : _weightsBalancer.UniformCross(1f);
-                //: _weightsBalancer.UniformCross(1f - (float)Math.Pow(_maxFitness, 1f/4f));
                 Enemy enemy = GetEnemy(neurons);
                 enemy.SetDefaultColor();
             }
@@ -88,7 +80,6 @@ namespace AI
 
             _results = _results.OrderByDescending(element => element.Fitness).ToList();
             _weightsBalancer.SetResults(_results.Take(_maxBestCount));
-            _maxFitness = _weightsBalancer.Results.Max(item => item.Fitness);
             Debug.Log(_results[0].Fitness);
             StartTraining();
         }

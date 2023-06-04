@@ -1,5 +1,3 @@
-using System;
-using System.Collections;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.UI;
@@ -27,6 +25,4 @@ public class TrainingUI : MonoBehaviour
         add => _startTrainingButton.onClick.AddListener(value); 
         remove => _startTrainingButton.onClick.RemoveListener(value); 
     }
-
-
 }

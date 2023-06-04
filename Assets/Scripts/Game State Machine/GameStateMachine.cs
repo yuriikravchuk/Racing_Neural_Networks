@@ -19,11 +19,7 @@ public class GameStateMachine : MonoBehaviour
     public void TrySwitchState<T>(){
         GameState nextState = FindState<T>();
         if (_currentState.CanTransit(nextState))
-        {
             SwitchState(nextState);
-            //Debug.Log(nextState);
-        }
-
     }
 
     private void SwitchState(GameState state)

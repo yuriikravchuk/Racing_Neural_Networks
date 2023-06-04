@@ -15,15 +15,9 @@ public class CountingState : GameState
         }
     }
 
-    public override void Enter()
-    {
-        _ui.StartCountdown();
-    }
+    public override void Enter() => _ui.StartCountdown();
 
-    public override void Exit()
-    {
-        _ui.ShowGoText();
-    }
+    public override void Exit() => _ui.ShowGoText();
 
-    public override void UpdateState(){ }
+    public override void UpdateState() { }
 }

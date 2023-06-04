@@ -28,10 +28,7 @@ public class MenuState : GameState
     }
 
 
-    public override void Exit()
-    {
-       _ui.HidePlayButton();
-    }
+    public override void Exit() => _ui.HidePlayButton();
 
     public override void UpdateState(){ }
 }

@@ -5,12 +5,9 @@ namespace pool
 	{
 		public bool Free { get; private set; } = true;
 
-		private void Awake()
-		{
-			gameObject.SetActive(false);
-		}
+        private void Awake() => gameObject.SetActive(false);
 
-		public void Push()
+        public void Push()
 		{
 			Free = false;
 			gameObject.SetActive(true);

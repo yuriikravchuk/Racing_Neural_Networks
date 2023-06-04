@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class CameraMovement : MonoBehaviour
 {
@@ -14,5 +12,4 @@ public class CameraMovement : MonoBehaviour
         targetRotation = Quaternion.Slerp(transform.rotation, targetRotation, _rotationSpeed);
         transform.rotation = targetRotation;
     }
-
 }

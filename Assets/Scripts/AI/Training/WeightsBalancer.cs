@@ -13,11 +13,11 @@ namespace AI
         private const float _minWeight = -1f, _maxWeight = 1f, _minBias = -1, _maxBias = 1, _mutationRate = 0.04f;
         private const int _maxBestParentsCount = 6;
         private const int _maxRegularParentsCount = 0;
-        private readonly System.Random _random;
+        private readonly Random _random;
 
         public WeightsBalancer()
         {
-            _random = new System.Random();
+            _random = new Random();
             _results = new List<TrainingResults>();
         }
 
@@ -79,6 +79,7 @@ namespace AI
                 for (int x = 0; x < neuronsCount; x++)
                 {
                     float[] weights = new float[weightsCount];
+
                     for (int y = 0; y < weightsCount; y++)
                     {
                         float[] weightsFromParents = Results.Select(item => item.Neurons[layerIndex][x].Weights[y]).ToArray();
@@ -87,12 +88,14 @@ namespace AI
                         weights[y] = weight;
 
                     }
+
                     float[] parentBiases = Results.Select(item => item.Neurons[layerIndex][x].Bias).ToArray();
                     float bias = GetRandomValue(parentBiases);
                     TryMutate(ref bias, mutationMultiplyier);
                     result[layerIndex][x] = new Neuron(weights, bias);
                 }
             }
+
             return result;
         }
 
@@ -137,8 +140,6 @@ namespace AI
             if (random <= _mutationRate * mutationMultiplyier)
                 value = GetRandomInRange(_minWeight, _maxWeight);
         }
-
-        //private float GetRandomInRange(float first, float second) => Random.Range(first, second);
 
         private float GetRandomInRange(float min, float max) => (float)(_random.NextDouble() * (max - min) + min);
 
