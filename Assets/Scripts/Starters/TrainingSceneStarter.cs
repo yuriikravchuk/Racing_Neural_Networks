@@ -2,6 +2,7 @@
 using UnityEngine;
 using AI;
 using System.Collections.Generic;
+using System.Linq;
 
 public class TrainingSceneStarter : MonoBehaviour
 {
@@ -20,7 +21,7 @@ public class TrainingSceneStarter : MonoBehaviour
         weightsBalancer.ScoresChanged += _board.UpdateScores;
         _saveBinder = new SaveBinder();
         var save = _saveBinder.Load();
-        weightsBalancer.SetResults(save);
+        weightsBalancer.SetResults(save.Select(item => new TrainingResults(item, 0)));
         _ui.SaveButtonClicked += () => _saveBinder.Save(weightsBalancer.Results);
         _enemyProvider = new Pool<Enemy>(_enemyPrefab);
         _aITrainer.Init(_enemyProvider, weightsBalancer);

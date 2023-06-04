@@ -4,7 +4,7 @@ using System.Linq;
 
 namespace AI
 {
-    public class WeightsBalancer : IEnemiesHandler
+    public class WeightsBalancer
     {
         public IReadOnlyList<TrainingResults> Results => _results;
         public event Action<IReadOnlyList<float>> ScoresChanged;

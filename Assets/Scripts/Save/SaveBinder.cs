@@ -1,28 +1,29 @@
 ﻿using AI;
 using System.Collections.Generic;
 using System.Linq;
+using static UnityEngine.Networking.UnityWebRequest;
 
 public class SaveBinder
 {
     private readonly ISaveProvider _provider;
-    private const string _fileName = "save1";
+    private const string _fileName = "save2";
 
     public SaveBinder() => _provider = new BinarySaveProvider();
 
-    public IReadOnlyList<TrainingResults> Load()
+    public IReadOnlyList<Neuron[][]> Load()
     {
-        IReadOnlyList<TrainingResults> save = _provider.TryGetSave<IReadOnlyList<TrainingResults>>(_fileName);
-        //List<TrainingResults> results = new List<TrainingResults>();
-        //foreach(TrainingResults result in save) {
-        //    results.Add(new TrainingResults(result.Neurons, 0)) ;
-        //}
-
+        List<Neuron[][]> save = _provider.TryGetSave<List<Neuron[][]>>(_fileName);
         return save;
     }
 
     public void Save(IReadOnlyList<TrainingResults> save)
     {
+        List<Neuron[][]> results = new List<Neuron[][]>();
+        foreach (TrainingResults result in save)
+        {
+            results.Add(result.Neurons);
+        }
 
-        _provider.UpdateSave(save, _fileName);
+        _provider.UpdateSave(results, _fileName);
     }
 }

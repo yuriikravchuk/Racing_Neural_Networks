@@ -28,7 +28,6 @@ public abstract class Car : MonoBehaviour, IDieable
         Died?.Invoke();
     }
 
-    
 
     protected abstract void GetMovementInputs(out float vertical, out float horizontal, out float breaking);
 

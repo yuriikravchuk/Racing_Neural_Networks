@@ -1,7 +1,6 @@
 using AI;
 using pool;
 using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
 
 public class EnemySpawner : MonoBehaviour
@@ -13,10 +12,10 @@ public class EnemySpawner : MonoBehaviour
     private IEnumerable<Neuron[][]> _brains;
     private List<Enemy> _enemies;
 
-    public void Init(IReadOnlyList<TrainingResults> brains)
+    public void Init(IReadOnlyList<Neuron[][]> brains)
     {
         enemiesProvider = new Pool<Enemy>(_enemyPrefab);
-        _brains = brains.Select(item => item.Neurons);
+        _brains = brains;
         _enemies = new List<Enemy>();
     }
 
