@@ -1,7 +1,6 @@
 ﻿using pool;
 using UnityEngine;
 using AI;
-using System.Collections.Generic;
 using System.Linq;
 
 public class TrainingSceneStarter : MonoBehaviour

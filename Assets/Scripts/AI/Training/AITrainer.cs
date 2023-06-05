@@ -88,7 +88,6 @@ namespace AI
         {
             _enemies.Remove(enemy);
             float fitness = enemy.Score / _currentMap.MaxPoints;
-            //_results.Add(new TestResults(enemy.Ai.CopyNeurons(), fitness, Time.time - enemy.SpawnTime));
             _results.Add(new TrainingResults(enemy.Ai.CopyNeurons(), fitness));
             enemy.Died -= () => OnEnemyDie(enemy);
             if (_enemies.Count == 0)

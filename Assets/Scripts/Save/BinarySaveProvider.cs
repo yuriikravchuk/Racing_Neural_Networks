@@ -21,14 +21,14 @@ public class BinarySaveProvider : ISaveProvider
         return save;
     }
 
-    public void UpdateSave<T>(T save, string name)
+    public void UpdateSave<T>(T save, string fileName)
     {
-        string path = GetFullFilePath(name);
+        string path = GetFullFilePath(fileName);
         var fileStream = new FileStream(path, FileMode.Create);
         _binaryFormater.Serialize(fileStream, save);
         fileStream.Close();
     }
 
     private string GetFullFilePath(string fileName)
-        => Application.persistentDataPath + Path.AltDirectorySeparatorChar + fileName + ".gm";
+        => Application.streamingAssetsPath + Path.AltDirectorySeparatorChar + fileName + ".gm";
 }

@@ -4,7 +4,7 @@ using System.Collections.Generic;
 public class SaveBinder
 {
     private readonly ISaveProvider _provider;
-    private const string _fileName = "save2";
+    private const string _fileName = "save";
 
     public SaveBinder() => _provider = new BinarySaveProvider();
 
