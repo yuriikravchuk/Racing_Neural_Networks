@@ -2,6 +2,8 @@
 
 A small Unity racing game where the AI opponents learn to drive with a neural network written from scratch and trained by a genetic algorithm. No ML libraries are used.
 
+**Windows build:** download it from [Releases](../../releases). It ships with previously trained networks for the AI opponents.
+
 Made in Unity 2021.3.
 
 ## How it works
